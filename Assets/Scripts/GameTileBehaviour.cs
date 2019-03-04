@@ -8,6 +8,22 @@ public class GameTileBehaviour : MonoBehaviour
 {
     public List<Material> gameTileMaterials = new List<Material>();
     public List<Mesh> gameTileMeshes = new List<Mesh>();
+    string[] m_monthsOfTheVikingYear = new string[]
+    {
+        "Einmánuður",
+        "Gói",
+        "Gormánuður",
+        "Harpa",
+        "Haustmánuður",
+        "Heyannir",
+        "Mörsugur",
+        "Skerpla",
+        "Sólmánuður",
+        "Þorri / Thorri",
+        "Tvímánuður",
+        "Ýlir"
+
+    };
     public GameTileTypes tileType;
     public bool isStartAreaTile = false;
     public bool canBeSeenByPlayer = false;
