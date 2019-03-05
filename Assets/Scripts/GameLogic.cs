@@ -146,11 +146,16 @@ public class GameLogic : MonoBehaviour
             mainCamera.SetStartPosition();
 
             // perform any actions to randomise the playe
-        
+            playerObject.GetComponent<PlayerBehaviour>().InitialisePlayer();
             // actions defined in player script? 
         }
     void SpawnAndDespawnBoardTiles()
-    { // maybe less costy with Vector 2? 
+    { 
+        /*
+            x x x 
+            x o x 
+            x x x
+        */
 
         List<GameObject> tilesToRemove = new List<GameObject>();
         // Get the positions sorrounding the player #endregion [x]
@@ -182,16 +187,13 @@ public class GameLogic : MonoBehaviour
 
                 if(!gameTilesDictionary.TryGetValue(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z), out type))
                 {
-                    
-                    Debug.Log("Have to creaye new tile...");
+                    //Debug.Log("Have to creaye new tile...");
                     if(gameTilesPool.Count >= 1)
                     {
                         tile = gameTilesPool[gameTilesPool.Count-1];
                         tile.transform.position = potentialSpawnPositions[b];
-                        // need to randomize the tile type here ----------------------
                         GameTileTypes tileType = ChooseRandomGameTile();
                         tile.GetComponent<GameTileBehaviour>().SetTileType(tileType);
-                        // -----------------------------------------------------------
                         tile.SetActive(true);
                         gameTilesDictionary.Add(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z),tileType);
                         gameTilesPool.Remove(tile);
@@ -226,12 +228,10 @@ public class GameLogic : MonoBehaviour
             }
         ApplyFog();
     }
-
     void ApplyFog()
     {
         for(int x = (int) gameTileStartPosition.x-3; x < (int)gameTileStartPosition.x+4; x++)
         {
-            Debug.Log("getting here");
             for(int z = (int) gameTileStartPosition.z-3; z < (int)gameTileStartPosition.z+4; z++)
             {
                 if( x == gameTileStartPosition.x+3 && z == gameTileStartPosition.z-3 || 
@@ -349,6 +349,4 @@ public class GameLogic : MonoBehaviour
 
         return randomTile;
     }
-
-    
 }
