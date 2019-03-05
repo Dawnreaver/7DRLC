@@ -30,9 +30,16 @@ public class GameLogic : MonoBehaviour
     private Vector3 m_oldPlayerPosition;
 
     // Camera
-
     public MainCameraBehaviour mainCamera;
     public float cameraMOvementSpeed = 5.0f;
+
+    // game logic
+
+    public int numberOfNewSpawnedTiles = 0;
+    public int vinlandTileThreshold = 100;
+    public bool vinlandTileHasSpawned = false;
+    public int secretTileTreshold =50;
+    public bool secretTileHasSpawned = false;
 
     Dictionary<Vector2, GameTileTypes> gameTilesDictionary = new Dictionary<Vector2, GameTileTypes>();
     // Start is called before the first frame update
@@ -198,6 +205,7 @@ public class GameLogic : MonoBehaviour
                         gameTilesDictionary.Add(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z),tileType);
                         gameTilesPool.Remove(tile);
                         usedGameTiles.Add(tile);
+                        numberOfNewSpawnedTiles += 1;
                     }
                     else
                     {

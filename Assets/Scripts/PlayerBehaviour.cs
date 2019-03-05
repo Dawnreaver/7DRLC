@@ -34,6 +34,23 @@ public class PlayerBehaviour : MonoBehaviour
         "Skíðblaðnir","Skjöldr","Svalbarði","Tráni","Trékyllir","Unnblakkr","Uxi","Vísundr","Yðliða"
     };
 
+    string[] m_monthsOfTheVikingYear = new string[]
+    {
+        "Einmánuður",
+        "Gói",
+        "Gormánuður",
+        "Harpa",
+        "Haustmánuður",
+        "Heyannir",
+        "Mörsugur",
+        "Skerpla",
+        "Sólmánuður",
+        "Þorri / Thorri",
+        "Tvímánuður",
+        "Ýlir"
+
+    };
+
     // recognise environment
     RaycastHit hit;
     // movement
