@@ -12,6 +12,7 @@ public class InterfaceBehaviour : MonoBehaviour
     public GameObject loadingScreen;
     public GameObject optionsScreen;
     public Text optionsBackButtontext;
+    public GameObject inGameScreen;
     public GameObject inGameMenu;
     public GameObject traderScreen;
     public GameObject endGameScreen;
@@ -23,10 +24,26 @@ public class InterfaceBehaviour : MonoBehaviour
      public Text inventoryFoodText;
      public Text inventoryWeaponText;
      public Text inventoryLootText;
-    // Start is called before the first frame update
+    
+    List<string> hintsAndTrivia = new List<string>()
+    {
+        "Are we there yet?",
+        "Move with W,A,S,D or the arrow keys",
+        "Movement requires sustenance!",
+        "Never run out of food! Especially mead!",
+        "You can open and close the ships inventory with 'I'",
+        "You will need weapons to brave the perils Midgard",
+        "Vikings devided the year in summer and winter months",
+        "Sögur are the tales of worthy men, their voyages and deeds",
+        "There is rumours of a secret tower",
+        " According to legend, only the bravest vikings who die sword in hand, will enter Valhalla"
+    };
+    private int m_triviaIndex = 0;
+    public Text hintsAndTriviaText;
     void Start()
     {
         // Splash screen
+        ShowNextHint();
     }
 
     void Update()
@@ -61,8 +78,11 @@ public class InterfaceBehaviour : MonoBehaviour
 
     public void LoadGame()
     {
+        // TO DO: Needs to be reworked
         mainMenuScreen.SetActive(false);
-        loadingScreen.SetActive(true);
+        //loadingScreen.SetActive(true);
+        gameLogic.StartGame();
+        inGameScreen.SetActive(true);
     }
     public void EnableOptionsMenu()
     {
@@ -136,5 +156,30 @@ public class InterfaceBehaviour : MonoBehaviour
         inventoryCrewText.text = ""+playerObj.crew;
         inventoryWeaponText.text = ""+playerObj.weapons;
         inventoryLootText.text = ""+playerObj.loot;
+    }
+
+    public void ShowNextHint()
+    {
+        if(m_triviaIndex < hintsAndTrivia.Count-1)
+        {
+            m_triviaIndex+=1;
+        }
+        else
+        {
+           m_triviaIndex = 0;  
+        }
+        hintsAndTriviaText.text = "Did you know: \n\n"+hintsAndTrivia[m_triviaIndex];
+    }
+    public void ShowLastHint()
+    {
+        if(m_triviaIndex > 0)
+        {
+            m_triviaIndex-=1;
+        }
+        else
+        {
+           m_triviaIndex = hintsAndTrivia.Count-1;  
+        }
+        hintsAndTriviaText.text = "Did you know: \n"+hintsAndTrivia[m_triviaIndex];
     }
 }

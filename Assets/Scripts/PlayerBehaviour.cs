@@ -37,19 +37,20 @@ public class PlayerBehaviour : MonoBehaviour
 
     string[] m_monthsOfTheVikingYear = new string[]
     {
-        "Einmánuður",
-        "Gói",
+        //winter months
         "Gormánuður",
-        "Harpa",
-        "Haustmánuður",
-        "Heyannir",
+        "Ýlir",
         "Mörsugur",
+        "Þorri",
+        "Gói",
+        "Einmánuður",
+        // summer months
+        "Harpa",
         "Skerpla",
         "Sólmánuður",
-        "Þorri / Thorri",
+        "Heyannir",
         "Tvímánuður",
-        "Ýlir"
-
+        "Haustmánuður"
     };
 
     // recognise environment
@@ -65,6 +66,10 @@ public class PlayerBehaviour : MonoBehaviour
     
     void Start()
     {
+        /*for( int a = 0; a < 10; a++)
+        {
+            RandomisePlayer();
+        }*/
     }
 
     void Update()
@@ -74,31 +79,55 @@ public class PlayerBehaviour : MonoBehaviour
             float moveDistance = 1.0f;
             if(Input.GetKeyDown("w") || Input.GetKeyDown("up"))
             {
-                PlayerConsumeFood(1);
-                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
-                transform.position = newPosition;
-                StartCoroutine("RotateMe",0.0f);
+                if(transform.localRotation.y != 0.0f)
+                {
+                    transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+                }
+                else
+                {
+                    PlayerConsumeFood(1);
+                    Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
+                    transform.position = newPosition;
+                }
             }
             if(Input.GetKeyDown("s")|| Input.GetKeyDown("down"))
             {
-                PlayerConsumeFood(1);
-                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
-                transform.position = newPosition;
-                StartCoroutine("RotateMe",180.0f);
+                if(transform.localRotation.y != 1.0f)
+                {
+                    transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+                }
+                else
+                {
+                    PlayerConsumeFood(1);
+                    Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
+                    transform.position = newPosition;
+                }
             }
             if(Input.GetKeyDown("a")|| Input.GetKeyDown("left"))
             {
-                PlayerConsumeFood(1);
-                Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
-                transform.position = newPosition;
-            StartCoroutine("RotateMe",270.0f);
+                if(transform.localRotation.y != -0.7071068f)
+                {
+                    transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
+                }
+                else
+                {
+                    PlayerConsumeFood(1);
+                    Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
+                    transform.position = newPosition;
+                }
             }
             if(Input.GetKeyDown("d")|| Input.GetKeyDown("right"))
             {
-                PlayerConsumeFood(1);
-                Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
-                transform.position = newPosition;
-                StartCoroutine("RotateMe",90.0f);
+                if(transform.localRotation.y != 0.7071068f)
+                {
+                    transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+                }
+                else
+                {
+                    PlayerConsumeFood(1);
+                    Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
+                    transform.position = newPosition;
+                }
             }
         }
     }
@@ -115,9 +144,11 @@ public class PlayerBehaviour : MonoBehaviour
 
     IEnumerator RotateMe(float newRotation)
     {
+        //transform.rotation = Quaternion.Euler(0.0f, (float)Mathf.Floor(newRotation), 0.0f);
         //Quaternion myNewRotation = Quaternion.AngleAxis(newRotation, Vector3.up);
         //transform.rotation = Quaternion.Slerp(transform.rotation, myNewRotation, rotationTime);
-        transform.Rotate(0.0f, newRotation, 0.0f);
+        transform.Rotate(0.0f,newRotation,0.0f,Space.World);
+        
         return null;
 
     }

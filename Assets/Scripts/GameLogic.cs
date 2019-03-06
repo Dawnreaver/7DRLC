@@ -60,6 +60,11 @@ public class GameLogic : MonoBehaviour
         ApplyFog();
     }
 
+    public void StartGame()
+    {
+        gameStarted = true;
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
