@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
+// map generation
+
     // game tiles
     public List<GameObject> gameTilesPool = new List<GameObject>();
     public List<GameObject> usedGameTiles = new List<GameObject>();
@@ -22,7 +24,7 @@ public class GameLogic : MonoBehaviour
     public GameObject fogPrefab;
     List<Vector2> fogPosition = new List<Vector2>();
     private int m_fogObjectsPoolSize = 42;
-
+// game play
     //player
     public GameObject playerObjectPrefab;
     public GameObject playerObject;
@@ -34,7 +36,8 @@ public class GameLogic : MonoBehaviour
     public float cameraMOvementSpeed = 5.0f;
 
     // game logic
-
+    public bool gameStarted = false;
+    public bool menuEnabled = false;
     public int numberOfNewSpawnedTiles = 0;
     public int vinlandTileThreshold = 100;
     public bool vinlandTileHasSpawned = false;
@@ -142,7 +145,6 @@ public class GameLogic : MonoBehaviour
                 }
             }
         }
-        
     }
     void SpawnPlayer()
         {
@@ -151,6 +153,7 @@ public class GameLogic : MonoBehaviour
             playerObject.transform.position = gameTileStartPosition;
             mainCamera.followObject = playerObject;
             mainCamera.SetStartPosition();
+            playerObject.GetComponent<PlayerBehaviour>().gameLogic = this;
 
             // perform any actions to randomise the playe
             playerObject.GetComponent<PlayerBehaviour>().InitialisePlayer();

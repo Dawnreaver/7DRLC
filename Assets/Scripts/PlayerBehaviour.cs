@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    public GameLogic gameLogic;
     // randomization
     public string playerName, playerAttribute, shipName, personalPronoun;
     public enum PlayerGenders{Female, Male}
@@ -59,7 +60,7 @@ public class PlayerBehaviour : MonoBehaviour
     // inventory
     public int crew = 0;
     public int food = 0;
-    public int treasure = 0;
+    public int loot = 0;
     public int weapons = 0;
     
     void Start()
@@ -68,40 +69,38 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Update()
     {
-        float moveDistance = 1.0f;
-        if(Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+        if(gameLogic.gameStarted && !gameLogic.menuEnabled)
         {
-            PlayerConsumeFood(1);
-            Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
-            transform.position = newPosition;
-            StartCoroutine("RotateMe",0.0f);
+            float moveDistance = 1.0f;
+            if(Input.GetKeyDown("w") || Input.GetKeyDown("up"))
+            {
+                PlayerConsumeFood(1);
+                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
+                transform.position = newPosition;
+                StartCoroutine("RotateMe",0.0f);
+            }
+            if(Input.GetKeyDown("s")|| Input.GetKeyDown("down"))
+            {
+                PlayerConsumeFood(1);
+                Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
+                transform.position = newPosition;
+                StartCoroutine("RotateMe",180.0f);
+            }
+            if(Input.GetKeyDown("a")|| Input.GetKeyDown("left"))
+            {
+                PlayerConsumeFood(1);
+                Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
+                transform.position = newPosition;
+            StartCoroutine("RotateMe",270.0f);
+            }
+            if(Input.GetKeyDown("d")|| Input.GetKeyDown("right"))
+            {
+                PlayerConsumeFood(1);
+                Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
+                transform.position = newPosition;
+                StartCoroutine("RotateMe",90.0f);
+            }
         }
-         if(Input.GetKeyDown("s")|| Input.GetKeyDown("down"))
-        {
-            PlayerConsumeFood(1);
-            Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
-            transform.position = newPosition;
-            StartCoroutine("RotateMe",180.0f);
-        }
-         if(Input.GetKeyDown("a")|| Input.GetKeyDown("left"))
-        {
-            PlayerConsumeFood(1);
-            Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
-            transform.position = newPosition;
-           StartCoroutine("RotateMe",270.0f);
-        }
-         if(Input.GetKeyDown("d")|| Input.GetKeyDown("right"))
-        {
-            PlayerConsumeFood(1);
-            Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
-            transform.position = newPosition;
-            StartCoroutine("RotateMe",90.0f);
-        }
-
-       /* if(Input.GetButtonDown("Fire1"))
-        {
-            RotateLeft();
-        }*/
     }
 
     void FixedUpdate()
@@ -127,7 +126,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         food = 24;
         crew = Random.Range(36,41);
-        treasure = 5;
+        loot = 5;
         weapons = 0;
         RandomisePlayer();
     }
@@ -148,6 +147,7 @@ public class PlayerBehaviour : MonoBehaviour
 
             if(crew <= 0)
             {
+                crew = 0;
                 Debug.Log("Lost Game: Starvation");
             }
         }
