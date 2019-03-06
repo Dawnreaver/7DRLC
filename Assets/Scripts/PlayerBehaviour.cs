@@ -55,6 +55,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     // recognise environment
     RaycastHit hit;
+    private GameObject m_lastLookedAtObject;
     // movement
     public float rotationTime = 0.0f;
 
@@ -135,22 +136,28 @@ public class PlayerBehaviour : MonoBehaviour
     void FixedUpdate()
     {
         Debug.DrawLine(transform.position, transform.position+transform.forward,Color.red);
-
-        if(Physics.Raycast(transform.position,transform.position+transform.forward, out hit, 1.0f))
+        Debug.Log("Shooting ray.");
+        if(Physics.Raycast(gameObject.transform.position,gameObject.transform.position+transform.forward, out hit, 1.0f))
         {
-            Debug.Log(hit.collider.tag);
+             Debug.Log("We hit something.");
+            /*InteractableObjectBehaviour obj = hit.collider.gameObject.GetComponent<InteractableObjectBehaviour>();
+            if(hit.collider.gameObject != m_lastLookedAtObject)
+            {
+                m_lastLookedAtObject.GetComponent<InteractableObjectBehaviour>().DisableActionIndicator();
+                m_lastLookedAtObject = hit.collider.gameObject;
+            }
+            Debug.Log("Yes!");
+            obj.EnableActionIndicator();
+            */
+            Debug.Log(hit.collider.gameObject.tag);
         }
     }
 
-    IEnumerator RotateMe(float newRotation)
+    void OnGizmoDraw()
     {
-        //transform.rotation = Quaternion.Euler(0.0f, (float)Mathf.Floor(newRotation), 0.0f);
-        //Quaternion myNewRotation = Quaternion.AngleAxis(newRotation, Vector3.up);
-        //transform.rotation = Quaternion.Slerp(transform.rotation, myNewRotation, rotationTime);
-        transform.Rotate(0.0f,newRotation,0.0f,Space.World);
-        
-        return null;
-
+        //Gizmos.color = Color.red;
+        Vector3 pos = transform.position+transform.forward;
+        Gizmos.DrawSphere(pos, 1.0f);
     }
 
     public void InitialisePlayer()

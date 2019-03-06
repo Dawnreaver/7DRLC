@@ -30,7 +30,7 @@ public class GameTileBehaviour : MonoBehaviour
     {
         tileType = type;
         AdjustTileMaterial();
-        AdjustTileMesh();
+        //AdjustTileMesh();
     }
 
     private void AdjustTileMaterial()
@@ -82,11 +82,6 @@ public class GameTileBehaviour : MonoBehaviour
                 gameTileObject.tag="Fortress";
             break;
         }
-    }
-
-    private void AdjustTileMesh()
-    {
-        
     }
 
 }

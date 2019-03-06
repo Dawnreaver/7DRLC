@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2215393417067776184}
   m_Layer: 0
   m_Name: PlayerObject
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2215393417067776187}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2956301356609658073}
   m_Father: {fileID: 0}
@@ -177,15 +177,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.5
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300016, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
+    - target: {fileID: 2300016, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300016, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300018, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
+    - target: {fileID: 2300018, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300018, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300020, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
+    - target: {fileID: 2300020, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300020, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300022, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
+    - target: {fileID: 2300022, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300022, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -280,54 +328,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300014, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300016, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
-    - target: {fileID: 2300016, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300016, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300018, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
-    - target: {fileID: 2300018, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300018, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300020, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
-    - target: {fileID: 2300020, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300020, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300022, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b15e85eab7e590a4683621d68681ad05, type: 2}
-    - target: {fileID: 2300022, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2300022, guid: 5201fb84fe3c7a244b5872e364b1716f, type: 3}
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
