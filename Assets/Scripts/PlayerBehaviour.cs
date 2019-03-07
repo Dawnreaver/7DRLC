@@ -6,7 +6,7 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public GameLogic gameLogic;
     // randomization
-    public string playerName, playerAttribute, shipName, personalPronoun;
+    public string playerName, father, mother, month, playerAttribute, shipName,vinland, personalPronoun;
     public enum PlayerGenders{Female, Male}
     public PlayerGenders playerGender;
     private List<string> m_maleNames = new List<string>()
@@ -58,6 +58,7 @@ public class PlayerBehaviour : MonoBehaviour
     private GameObject m_lastLookedAtObject;
     // movement
     public float rotationTime = 0.0f;
+    public bool pathisBlocked = false;
 
     // inventory
     public int crew = 0;
@@ -84,7 +85,7 @@ public class PlayerBehaviour : MonoBehaviour
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
                 }
-                else
+                else if (transform.localRotation.y == 0.0f && !pathisBlocked)
                 {
                     PlayerConsumeFood(1);
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
@@ -97,7 +98,7 @@ public class PlayerBehaviour : MonoBehaviour
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
                 }
-                else
+                else if (transform.localRotation.y == 1.0f && !pathisBlocked)
                 {
                     PlayerConsumeFood(1);
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
@@ -110,7 +111,7 @@ public class PlayerBehaviour : MonoBehaviour
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
                 }
-                else
+                else if (transform.localRotation.y == -0.7071068f && !pathisBlocked)
                 {
                     PlayerConsumeFood(1);
                     Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
@@ -123,7 +124,7 @@ public class PlayerBehaviour : MonoBehaviour
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
                 }
-                else
+                else if (transform.localRotation.y == 0.7071068f && !pathisBlocked)
                 {
                     PlayerConsumeFood(1);
                     Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
@@ -136,10 +137,8 @@ public class PlayerBehaviour : MonoBehaviour
     void FixedUpdate()
     {
         Debug.DrawRay(transform.position, transform.forward,Color.red);
-        Debug.Log("Shooting ray.");
         if(Physics.Raycast(transform.position,transform.forward, out hit, 1.0f))
         {
-             Debug.Log("We hit something.");
             InteractableObjectBehaviour obj = hit.collider.gameObject.GetComponent<InteractableObjectBehaviour>();
             if(m_lastLookedAtObject == null)
             {
@@ -150,9 +149,22 @@ public class PlayerBehaviour : MonoBehaviour
                 m_lastLookedAtObject.GetComponent<InteractableObjectBehaviour>().DisableActionIndicator();
                 m_lastLookedAtObject = hit.collider.gameObject;
             }
-            Debug.Log("Yes!");
+            if(obj.interactableObject == InteractableObjectTypes.Secret || 
+                obj.interactableObject ==InteractableObjectTypes.Trader || 
+                obj.interactableObject == InteractableObjectTypes.Village)
+            {
+                pathisBlocked = true;
+            }
             obj.EnableActionIndicator();
             Debug.Log(hit.collider.gameObject.tag);
+        }
+        else
+        {
+            if(m_lastLookedAtObject != null)
+            {
+                m_lastLookedAtObject.GetComponent<InteractableObjectBehaviour>().DisableActionIndicator();
+            }
+            pathisBlocked = false;
         }
     }
 
@@ -201,24 +213,26 @@ public class PlayerBehaviour : MonoBehaviour
         switch(playerGender)
         {
             case PlayerGenders.Female :
-                playerName = ReturnRandomString(m_femaleNames);
+                playerName = "<color=red>"+ReturnRandomString(m_femaleNames)+"</color>";
                 playerAttribute = ", daughter of Jarl ";
                 personalPronoun = " her ";
             break;
 
             case PlayerGenders.Male : 
-                playerName = ReturnRandomString(m_maleNames);
+                playerName = "<color=red>"+ReturnRandomString(m_maleNames)+"</color>";
                 playerAttribute = ", son of Jarl ";
                 personalPronoun = " his ";
             break;
         }
 
-        shipName = ReturnRandomString(m_shipNames);
+        shipName = "<color=red>"+ReturnRandomString(m_shipNames)+"</color>";
+        father = "<color=red>"+ ReturnRandomString(m_maleNames, playerName)+" "+ReturnRandomString(m_maleAttributes)+"</color>";
+        mother = "<color=red>"+ ReturnRandomString(m_femaleNames,playerName)+" "+ReturnRandomString(m_femaleAttributes)+"</color>";
+        month = ReturnRandomString(m_monthsOfTheVikingYear);
+        vinland = "<color=red>Vinland</color>";
        
         print("This is the story of "+playerName+playerAttribute+
-        ReturnRandomString(m_maleNames, playerName)+" "+ReturnRandomString(m_maleAttributes)+" and "+
-        ReturnRandomString(m_femaleNames,playerName)+" "+ReturnRandomString(m_femaleAttributes)+
-        ", who set out on"+personalPronoun+"proud vessel "+shipName+" with a band of "+crew+" on the search for...");
+       father+" and "+mother+", who set out in the month of "+month+" on"+personalPronoun+"proud vessel "+shipName+" with a band of "+crew+" on the search for "+vinland);
 
     }
 
@@ -236,6 +250,32 @@ public class PlayerBehaviour : MonoBehaviour
             while(generateNewName)
             {
                 randomString = strings[Random.Range(0,strings.Count)];
+                if(randomString != unique)
+                {
+                    generateNewName = false;
+
+                    uniqueName = randomString;
+                    return uniqueName;
+                }
+            }
+        }
+        return randomString;
+    }
+
+    string ReturnRandomString(string[] strings, string unique = null)
+    {
+        string randomString;
+
+        randomString = strings[Random.Range(0,strings.Length)];
+
+        if(unique != null)
+        {
+            string uniqueName;
+            bool generateNewName = true;
+
+            while(generateNewName)
+            {
+                randomString = strings[Random.Range(0,strings.Length)];
                 if(randomString != unique)
                 {
                     generateNewName = false;

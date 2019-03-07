@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InteractableObjectTypes{Island, Village, Trader, Pirate, MidgardSerpent, Secret}
+
 public class InteractableObjectBehaviour : MonoBehaviour
 {
-    public enum InteractableObjectTypes{Island, Village, Trader, Pirate, MidgardSerpent, Secret}
+   
     public InteractableObjectTypes interactableObject;
     public GameObject actionIndicator;
     public List<Mesh> actionIndicatorMesh = new List<Mesh>();
