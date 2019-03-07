@@ -135,20 +135,23 @@ public class PlayerBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.DrawLine(transform.position, transform.position+transform.forward,Color.red);
+        Debug.DrawRay(transform.position, transform.forward,Color.red);
         Debug.Log("Shooting ray.");
-        if(Physics.Raycast(gameObject.transform.position,gameObject.transform.position+transform.forward, out hit, 1.0f))
+        if(Physics.Raycast(transform.position,transform.forward, out hit, 1.0f))
         {
              Debug.Log("We hit something.");
-            /*InteractableObjectBehaviour obj = hit.collider.gameObject.GetComponent<InteractableObjectBehaviour>();
-            if(hit.collider.gameObject != m_lastLookedAtObject)
+            InteractableObjectBehaviour obj = hit.collider.gameObject.GetComponent<InteractableObjectBehaviour>();
+            if(m_lastLookedAtObject == null)
+            {
+                m_lastLookedAtObject = hit.collider.gameObject;
+            }
+            else if(hit.collider.gameObject != m_lastLookedAtObject)
             {
                 m_lastLookedAtObject.GetComponent<InteractableObjectBehaviour>().DisableActionIndicator();
                 m_lastLookedAtObject = hit.collider.gameObject;
             }
             Debug.Log("Yes!");
             obj.EnableActionIndicator();
-            */
             Debug.Log(hit.collider.gameObject.tag);
         }
     }
