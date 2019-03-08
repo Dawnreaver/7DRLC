@@ -6,8 +6,15 @@ using System.IO;
 
 public class SaveSaga : MonoBehaviour 
 {
+    // saga content
     public List<Sprite> borderDecoration = new List<Sprite>();
     public RectTransform rectT; // Assign the UI element which you wanna capture
+    public GameObject contentObject;
+    public GameObject sagaContentPrefab;
+    public GameObject endOfSagaPrefab;
+    private int m_sagaContentCount = 0;
+    float sagaContentStartY = 200.0f; // needs to be always fed in negative
+    float sagaContentHight = 150.0f;
 
     private int width; // width of the object to capture
     private int height; // height of the object to capture
@@ -17,6 +24,18 @@ public class SaveSaga : MonoBehaviour
     private Vector2 offsetMinValues;
     private Vector2 offsetMaxValues;
     private Vector3 localScaleValues;
+
+    public void AddSagaContent(string content, GameTileTypes tileType = GameTileTypes.WaterTile)
+    {
+        m_sagaContentCount += 1;
+        GameObject sagaContent = Instantiate(sagaContentPrefab, rectT.anchoredPosition, Quaternion.identity) as GameObject;
+        sagaContent.name = "Saga Content "+m_sagaContentCount;
+        sagaContent.transform.SetParent(contentObject.transform);
+        sagaContent.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+        sagaContent.GetComponent<RectTransform>().position = new Vector2(0.0f,rectT.position.y-(+sagaContentStartY+(sagaContentHight*m_sagaContentCount)));
+        
+        sagaContent.GetComponent<SagaContentBehaviour>().SetText(content);
+    }
 
     // Update is called once per frame
     void Update()

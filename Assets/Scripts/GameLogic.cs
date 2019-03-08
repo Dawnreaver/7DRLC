@@ -95,6 +95,9 @@ public class GameLogic : MonoBehaviour
         "Seljasund"
     };
 
+    // Saga generation
+    public SaveSaga sagaLogic;
+
     Dictionary<Vector2, GameTileTypes> gameTilesDictionary = new Dictionary<Vector2, GameTileTypes>();
     // Start is called before the first frame update
     void Start()

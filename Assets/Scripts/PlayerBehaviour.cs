@@ -252,9 +252,7 @@ public class PlayerBehaviour : MonoBehaviour
         month = ReturnRandomString(m_monthsOfTheVikingYear);
         vinland = "<color=red>Vinland</color>";
        
-        print("This is the story of "+playerName+playerAttribute+
-       father+" and "+mother+", who set out in the month of "+month+" on"+personalPronoun+"proud vessel "+shipName+" with a band of "+crew+" on the search for "+vinland);
-
+       gameLogic.sagaLogic.AddSagaContent( "This is the story of "+playerName + playerAttribute + father+" and " + mother + ", who set out in the month of " + month + " on" + personalPronoun + "proud vessel " + shipName + " with a band of " + crew + " on the search for " + vinland + ".");
     }
 
     string ReturnRandomString(List<string> strings, string unique = null)
