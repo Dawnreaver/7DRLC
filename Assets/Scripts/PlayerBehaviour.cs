@@ -139,33 +139,54 @@ public class PlayerBehaviour : MonoBehaviour
         Debug.DrawRay(transform.position, transform.forward,Color.red);
         if(Physics.Raycast(transform.position,transform.forward, out hit, 1.0f))
         {
-            InteractableObjectBehaviour obj = hit.collider.gameObject.GetComponent<InteractableObjectBehaviour>();
+            GameTileBehaviour obj = hit.collider.gameObject.GetComponent<GameTileBehaviour>();
+
             if(m_lastLookedAtObject == null)
             {
                 m_lastLookedAtObject = hit.collider.gameObject;
             }
             else if(hit.collider.gameObject != m_lastLookedAtObject)
             {
-                m_lastLookedAtObject.GetComponent<InteractableObjectBehaviour>().DisableActionIndicator();
+                m_lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
                 m_lastLookedAtObject = hit.collider.gameObject;
             }
-            if(obj.interactableObject == InteractableObjectTypes.Secret || 
-                obj.interactableObject ==InteractableObjectTypes.Trader || 
-                obj.interactableObject == InteractableObjectTypes.Village)
+            // impassable tiles: Start Village, village(has to be raised and turned into an island), trader, secret, vinland
+            if(obj.tileType == GameTileTypes.StartVillageTile || obj.tileType == GameTileTypes.VillageTile
+            ||obj.tileType == GameTileTypes.VinlandTile || obj.tileType == GameTileTypes.SecretTile || obj.tileType == GameTileTypes.TraderTile)
             {
                 pathisBlocked = true;
             }
+            else
+            {
+                pathisBlocked = false;
+            }
+
+            if(obj.tileType != GameTileTypes.WaterTile)
+            {
+                obj.EnableActionIndicator();
+            }
+            /* if(obj.tileType == GameTileTypes.SecretTile || 
+                obj.tileType ==GameTileTypes.VillageTile || 
+                obj.tileType == GameTileTypes.StartVillageTile ||
+                obj.tileType == GameTileTypes.StartVillageTile)
+            {
+                pathisBlocked = true;
+            }
+            else
+            {
+
+            }
             obj.EnableActionIndicator();
-            Debug.Log(hit.collider.gameObject.tag);
+            Debug.Log(hit.collider.gameObject.tag);*/
         }
-        else
+        /*else
         {
             if(m_lastLookedAtObject != null)
             {
-                m_lastLookedAtObject.GetComponent<InteractableObjectBehaviour>().DisableActionIndicator();
+                m_lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
             }
             pathisBlocked = false;
-        }
+        }*/
     }
 
     void OnGizmoDraw()

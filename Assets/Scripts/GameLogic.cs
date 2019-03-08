@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameLogic : MonoBehaviour
 {
 // map generation
-
     // game tiles
     public List<GameObject> gameTilesPool = new List<GameObject>();
     public List<GameObject> usedGameTiles = new List<GameObject>();
@@ -43,6 +42,58 @@ public class GameLogic : MonoBehaviour
     public bool vinlandTileHasSpawned = false;
     public int secretTileTreshold =50;
     public bool secretTileHasSpawned = false;
+
+    List<string> m_villageNames = new List<string>()
+    {
+        "Akrar",
+        "Arnallsstaoir",
+        "Asbjarnarstaoir",
+        "Atley",
+        "Ballara",
+        "Belgsdalr",
+        "Blaskogsa",
+        "Brenna",
+        "Brunastaoir",
+        "Brynjudalr",
+        "Eyjafjoll",
+        "Fagradalsa",
+        "Flokadalr",
+        "Forsoeludalr",
+        "Galmastrond",
+        "Glera nyrori",
+        "Gonguskarosaross",
+        "Grenivik",
+        "Gufaross",
+        "Hernar",
+        "Hlioarendi",
+        "Hlioir",
+        "Hnjoska",
+        "Holtastaoir",
+        "Horgardalsa",
+        "Hrafnstoptir",
+        "Hraungeroi",
+        "Hvaleyrr",
+        "Hvalvatnsfjoror",
+        "Hvanndalir",
+        "Kalmanstunga",
+        "Karlsdalr",
+        "Kerlingarfjoror",
+        "Kiojaleit",
+        "Kirkjubolstaor",
+        "Krofluhellir",
+        "Krossa",
+        "Lagarfljotsstrandir",
+        "Laugardalr",
+        "Lonlond",
+        "Njarovik",
+        "Oleifsbjorg",
+        "Ormsstaoir",
+        "Osomi",
+        "Raumsdaelafylki",
+        "Rauoaloekr",
+        "Sauoafellslond",
+        "Seljasund"
+    };
 
     Dictionary<Vector2, GameTileTypes> gameTilesDictionary = new Dictionary<Vector2, GameTileTypes>();
     // Start is called before the first frame update
@@ -135,6 +186,10 @@ public class GameLogic : MonoBehaviour
                     {
                         tile.name = "Start Village";
                         gameTile.SetTileType(GameTileTypes.StartVillageTile);
+                    }
+                    else if(x == 2+ mainVillageStartPosition.x && z == (int)mainVillageStartPosition.z)
+                    {
+                        gameTile.SetTileType(GameTileTypes.VinlandTile);
                     }
                     else
                     {
@@ -360,7 +415,7 @@ public class GameLogic : MonoBehaviour
         }
         else
         {
-            randomTile = (GameTileTypes) Random.Range(4,7); // Excluded - 1: StartVillageTile 2: VinlandTile 3: WaterTile 7: SecretTile
+            randomTile = (GameTileTypes) Random.Range(3,7); // Excluded - 1: StartVillageTile 2: VinlandTile 3: WaterTile 7: SecretTile
         }
 
         return randomTile;

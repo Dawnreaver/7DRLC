@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public class SaveSaga : MonoBehaviour {
-
+public class SaveSaga : MonoBehaviour 
+{
+    public List<Sprite> borderDecoration = new List<Sprite>();
     public RectTransform rectT; // Assign the UI element which you wanna capture
 
     private int width; // width of the object to capture

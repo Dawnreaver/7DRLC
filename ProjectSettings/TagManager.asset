@@ -4,15 +4,16 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Island
-  - Village
-  - Merchant
-  - Maelstrom
-  - Pirate
-  - Midgardsnake
-  - Home
-  - Vinland
-  - Fortress
+  - StartVillageTile
+  - WaterTile
+  - VillageTile
+  - IslandTile
+  - TraderTile
+  - PirateTile
+  - SerpentTile
+  - MaelstromTile
+  - VinlandTile
+  - SecretTile
   layers:
   - Default
   - TransparentFX
