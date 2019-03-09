@@ -131,10 +131,6 @@ public class GameLogic : MonoBehaviour
 
     }
 
-    void OnDrawGizmos()
-    {
-    }
-
     void PoolGameTiles()
     {
         for( int a = 0; a < m_gameTilesPoolSize; a ++)
@@ -189,6 +185,7 @@ public class GameLogic : MonoBehaviour
                     {
                         tile.name = "Start Village";
                         gameTile.SetTileType(GameTileTypes.StartVillageTile);
+                        gameTile.name = ReturnRandomString(m_villageNames);
                     }
                     else if(x == 2+ mainVillageStartPosition.x && z == (int)mainVillageStartPosition.z)
                     {
@@ -422,5 +419,136 @@ public class GameLogic : MonoBehaviour
         }
 
         return randomTile;
+    }
+
+     public string ReturnRandomString(List<string> strings, string unique = null)
+    {
+        string randomString;
+
+        randomString = strings[Random.Range(0,strings.Count)];
+
+        if(unique != null)
+        {
+            string uniqueName;
+            bool generateNewName = true;
+
+            while(generateNewName)
+            {
+                randomString = strings[Random.Range(0,strings.Count)];
+                if(randomString != unique)
+                {
+                    generateNewName = false;
+
+                    uniqueName = randomString;
+                    return uniqueName;
+                }
+            }
+        }
+        return randomString;
+    }
+
+    public string ReturnRandomString(string[] strings, string unique = null)
+    {
+        string randomString;
+
+        randomString = strings[Random.Range(0,strings.Length)];
+
+        if(unique != null)
+        {
+            string uniqueName;
+            bool generateNewName = true;
+
+            while(generateNewName)
+            {
+                randomString = strings[Random.Range(0,strings.Length)];
+                if(randomString != unique)
+                {
+                    generateNewName = false;
+
+                    uniqueName = randomString;
+                    return uniqueName;
+                }
+            }
+        }
+        return randomString;
+    }
+
+    public void RetireFromAdventure()
+    {
+        Debug.Log("End game early");
+    }
+
+    public void RansackGameTile()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+        GameTileBehaviour tile = obj.lastLookedAtObject.GetComponent<GameTileBehaviour>();
+        Debug.Log("Burn it to the ground!");
+
+        // lose a small number of men for the attack if you don't have weapons
+        if(obj.weapons == 0)
+        {
+            obj.crew -= Random.Range(1,3);
+            if(obj.crew < 0)
+            {
+                obj.crew = 0;
+
+                if(tile.tileType == GameTileTypes.TraderTile)
+                {
+                    Debug.Log("Died while rading a trader...");
+                    return;
+                }
+                else if(tile.tileType == GameTileTypes.VillageTile)
+                {
+                    Debug.Log("Died while rading a village...");
+                    return;
+                }
+            }
+        }
+        else
+        {
+            obj.weapons -= 1;
+
+            if(tile.tileType == GameTileTypes.TraderTile)
+            {
+                obj.loot += 1+ Random.Range(1,4);
+                obj.weapons += 1+ Random.Range(1,3);
+                Debug.Log("Raided a trader...");
+
+                // play effect
+            }
+            else if(tile.tileType == GameTileTypes.VillageTile)
+            {
+                obj.loot += 1+ Random.Range(0,3);
+                obj.food += 1+ Random.Range(1,4);
+                Debug.Log("Raided a village...");
+
+                // play effect
+            }
+
+            
+            
+        }
+        // turn ransacked game tile into an island
+        gameTilesDictionary.Remove(tile.ReturnPosition());
+        tile.SetTileType (GameTileTypes.IslandTile);
+        gameTilesDictionary.Add(tile.ReturnPosition(),tile.tileType);
+    }
+
+    public void TradeFood()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        obj.loot -= 1;
+        obj.food +=5;
+        // spawn some form of effects ? 
+    }
+
+    public void TradeWeapon()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        obj.loot -= 5;
+        obj.weapons +=1;
+        // spawn some form of effects ? 
     }
 }

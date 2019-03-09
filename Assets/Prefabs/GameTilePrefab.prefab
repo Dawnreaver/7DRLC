@@ -185,14 +185,13 @@ MonoBehaviour:
   tileType: 0
   isStartAreaTile: 0
   actionIndicatorMesh:
-  - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 4300000, guid: d19aaf8236da8ba478fb2699478b0b18, type: 3}
   - {fileID: 4300000, guid: caced92c884036643bfe79ff97d7a560, type: 3}
-  - {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 4300000, guid: fe8f32fb632c4ee458d8edc06a38069c, type: 3}
   - {fileID: 4300004, guid: caced92c884036643bfe79ff97d7a560, type: 3}
   - {fileID: 4300000, guid: d585d78e76c51b544962f1d4ac030c23, type: 3}
   - {fileID: 4300002, guid: caced92c884036643bfe79ff97d7a560, type: 3}
   actionIndicator: {fileID: 1217605460}
-  actionIndicatorRotationSpeed: 20
 --- !u!65 &7825716446328258118
 BoxCollider:
   m_ObjectHideFlags: 0

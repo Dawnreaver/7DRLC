@@ -10,10 +10,11 @@ public class SaveSaga : MonoBehaviour
     public List<Sprite> borderDecoration = new List<Sprite>();
     public RectTransform rectT; // Assign the UI element which you wanna capture
     public GameObject contentObject;
+    public GameObject startOfSagaPrefab;
     public GameObject sagaContentPrefab;
     public GameObject endOfSagaPrefab;
     private int m_sagaContentCount = 0;
-    float sagaContentStartY = 200.0f; // needs to be always fed in negative
+    float sagaContentStartY = 275.0f; // needs to be always fed in negative
     float sagaContentHight = 150.0f;
 
     private int width; // width of the object to capture
@@ -25,16 +26,29 @@ public class SaveSaga : MonoBehaviour
     private Vector2 offsetMaxValues;
     private Vector3 localScaleValues;
 
+    void Start()
+    {
+        InitialiseSage();
+    }
+
+    public void InitialiseSage()
+    {
+        GameObject start = Instantiate(startOfSagaPrefab, new Vector3(rectT.rect.x,rectT.rect.y,0.0f), Quaternion.identity) as GameObject;
+        start.transform.SetParent(contentObject.transform);
+        start.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+        start.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectT.rect.width/2,-100.0f);
+    }
+
     public void AddSagaContent(string content, GameTileTypes tileType = GameTileTypes.WaterTile)
     {
-        m_sagaContentCount += 1;
-        GameObject sagaContent = Instantiate(sagaContentPrefab, rectT.anchoredPosition, Quaternion.identity) as GameObject;
+        GameObject sagaContent = Instantiate(sagaContentPrefab, new Vector3(rectT.rect.x,rectT.rect.y,0.0f), Quaternion.identity) as GameObject;
         sagaContent.name = "Saga Content "+m_sagaContentCount;
         sagaContent.transform.SetParent(contentObject.transform);
         sagaContent.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
-        sagaContent.GetComponent<RectTransform>().position = new Vector2(0.0f,rectT.position.y-(+sagaContentStartY+(sagaContentHight*m_sagaContentCount)));
+        sagaContent.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectT.rect.width/2,-sagaContentStartY-(sagaContentHight*m_sagaContentCount));
         
         sagaContent.GetComponent<SagaContentBehaviour>().SetText(content);
+        m_sagaContentCount += 1;
     }
 
     // Update is called once per frame
@@ -68,7 +82,6 @@ public class SaveSaga : MonoBehaviour
                 ScreenCapture.CaptureScreenshot("FullPageScreenShot.png");
             }
         }
-
     }
 
     private void createCanvasWithRectTransform()

@@ -14,6 +14,8 @@ public class GameTileBehaviour : MonoBehaviour
     public List<Mesh> actionIndicatorMesh = new List<Mesh>();
     public GameObject actionIndicator;
 
+    public string name;
+
     private float m_actionIndicatorRotationSpeed = 60.0f;
     void OnEnable()
     {
@@ -171,5 +173,14 @@ public class GameTileBehaviour : MonoBehaviour
     public void DisableActionIndicator()
     {
         actionIndicator.SetActive(false);
+    }
+
+    public Vector2 ReturnPosition()
+    {
+        Vector2 myPosition; 
+
+        myPosition = new Vector2(transform.position.x, transform.position.z);
+
+        return myPosition;
     }
 }

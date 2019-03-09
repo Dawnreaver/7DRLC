@@ -25,6 +25,7 @@ public class InterfaceBehaviour : MonoBehaviour
      public Text inventoryWeaponText;
      public Text inventoryLootText;
     
+    public GameObject actionScreen;
     List<string> hintsAndTrivia = new List<string>()
     {
         "Are we there yet?",
@@ -68,12 +69,36 @@ public class InterfaceBehaviour : MonoBehaviour
                 playerInventoryOpened = !playerInventoryOpened;
                 StartCoroutine("OpenCloseInventory");
             }
+
+            if(Input.GetKeyDown("space"))
+            {
+                if(gameLogic.playerObject.GetComponent<PlayerBehaviour>().lastLookedAtObject != null )
+                {
+                    GameTileBehaviour obj = gameLogic.playerObject.GetComponent<PlayerBehaviour>().lastLookedAtObject.GetComponent<GameTileBehaviour>();
+
+                    if( obj.tileType == GameTileTypes.TraderTile || obj.tileType == GameTileTypes.VillageTile || obj.tileType == GameTileTypes.StartVillageTile)
+                    {
+                        EnableActionScreen();
+                        actionScreen.GetComponent<ActionScreenBehaviour>().AdjustActionDialogue(obj.tileType, obj.name);  
+                    }
+                }
+            }
         }
     }
 
     void FixedUpdate()
     {
         UpdateInterfaceTexts();
+    }
+
+    public void EnableActionScreen()
+    {
+        actionScreen.SetActive(true);
+    }
+
+    public void DisableActionScreen()
+    {
+        actionScreen.SetActive(false);
     }
 
     public void LoadGame()

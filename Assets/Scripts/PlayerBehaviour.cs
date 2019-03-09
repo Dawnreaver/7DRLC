@@ -55,7 +55,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     // recognise environment
     RaycastHit hit;
-    private GameObject m_lastLookedAtObject;
+    public GameObject lastLookedAtObject;
     // movement
     public float rotationTime = 0.0f;
     public bool pathisBlocked = false;
@@ -141,14 +141,14 @@ public class PlayerBehaviour : MonoBehaviour
         {
             GameTileBehaviour obj = hit.collider.gameObject.GetComponent<GameTileBehaviour>();
 
-            if(m_lastLookedAtObject == null)
+            if(lastLookedAtObject == null)
             {
-                m_lastLookedAtObject = hit.collider.gameObject;
+                lastLookedAtObject = hit.collider.gameObject;
             }
-            else if(hit.collider.gameObject != m_lastLookedAtObject)
+            else if(hit.collider.gameObject != lastLookedAtObject)
             {
-                m_lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
-                m_lastLookedAtObject = hit.collider.gameObject;
+                lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
+                lastLookedAtObject = hit.collider.gameObject;
             }
             // impassable tiles: Start Village, village(has to be raised and turned into an island), trader, secret, vinland
             if(obj.tileType == GameTileTypes.StartVillageTile || obj.tileType == GameTileTypes.VillageTile
@@ -165,35 +165,7 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 obj.EnableActionIndicator();
             }
-            /* if(obj.tileType == GameTileTypes.SecretTile || 
-                obj.tileType ==GameTileTypes.VillageTile || 
-                obj.tileType == GameTileTypes.StartVillageTile ||
-                obj.tileType == GameTileTypes.StartVillageTile)
-            {
-                pathisBlocked = true;
-            }
-            else
-            {
-
-            }
-            obj.EnableActionIndicator();
-            Debug.Log(hit.collider.gameObject.tag);*/
         }
-        /*else
-        {
-            if(m_lastLookedAtObject != null)
-            {
-                m_lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
-            }
-            pathisBlocked = false;
-        }*/
-    }
-
-    void OnGizmoDraw()
-    {
-        //Gizmos.color = Color.red;
-        Vector3 pos = transform.position+transform.forward;
-        Gizmos.DrawSphere(pos, 1.0f);
     }
 
     public void InitialisePlayer()
@@ -234,76 +206,24 @@ public class PlayerBehaviour : MonoBehaviour
         switch(playerGender)
         {
             case PlayerGenders.Female :
-                playerName = "<color=red>"+ReturnRandomString(m_femaleNames)+"</color>";
+                playerName = "<color=red>"+gameLogic.ReturnRandomString(m_femaleNames)+"</color>";
                 playerAttribute = ", daughter of Jarl ";
                 personalPronoun = " her ";
             break;
 
             case PlayerGenders.Male : 
-                playerName = "<color=red>"+ReturnRandomString(m_maleNames)+"</color>";
+                playerName = "<color=red>"+gameLogic.ReturnRandomString(m_maleNames)+"</color>";
                 playerAttribute = ", son of Jarl ";
                 personalPronoun = " his ";
             break;
         }
 
-        shipName = "<color=red>"+ReturnRandomString(m_shipNames)+"</color>";
-        father = "<color=red>"+ ReturnRandomString(m_maleNames, playerName)+" "+ReturnRandomString(m_maleAttributes)+"</color>";
-        mother = "<color=red>"+ ReturnRandomString(m_femaleNames,playerName)+" "+ReturnRandomString(m_femaleAttributes)+"</color>";
-        month = ReturnRandomString(m_monthsOfTheVikingYear);
+        shipName = "<color=red>"+gameLogic.ReturnRandomString(m_shipNames)+"</color>";
+        father = "<color=red>"+ gameLogic.ReturnRandomString(m_maleNames, playerName)+" "+gameLogic.ReturnRandomString(m_maleAttributes)+"</color>";
+        mother = "<color=red>"+ gameLogic.ReturnRandomString(m_femaleNames,playerName)+" "+gameLogic.ReturnRandomString(m_femaleAttributes)+"</color>";
+        month = gameLogic.ReturnRandomString(m_monthsOfTheVikingYear);
         vinland = "<color=red>Vinland</color>";
        
        gameLogic.sagaLogic.AddSagaContent( "This is the story of "+playerName + playerAttribute + father+" and " + mother + ", who set out in the month of " + month + " on" + personalPronoun + "proud vessel " + shipName + " with a band of " + crew + " on the search for " + vinland + ".");
-    }
-
-    string ReturnRandomString(List<string> strings, string unique = null)
-    {
-        string randomString;
-
-        randomString = strings[Random.Range(0,strings.Count)];
-
-        if(unique != null)
-        {
-            string uniqueName;
-            bool generateNewName = true;
-
-            while(generateNewName)
-            {
-                randomString = strings[Random.Range(0,strings.Count)];
-                if(randomString != unique)
-                {
-                    generateNewName = false;
-
-                    uniqueName = randomString;
-                    return uniqueName;
-                }
-            }
-        }
-        return randomString;
-    }
-
-    string ReturnRandomString(string[] strings, string unique = null)
-    {
-        string randomString;
-
-        randomString = strings[Random.Range(0,strings.Length)];
-
-        if(unique != null)
-        {
-            string uniqueName;
-            bool generateNewName = true;
-
-            while(generateNewName)
-            {
-                randomString = strings[Random.Range(0,strings.Length)];
-                if(randomString != unique)
-                {
-                    generateNewName = false;
-
-                    uniqueName = randomString;
-                    return uniqueName;
-                }
-            }
-        }
-        return randomString;
     }
 }
