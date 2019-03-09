@@ -62,7 +62,9 @@ public class PlayerBehaviour : MonoBehaviour
 
     // inventory
     public int crew = 0;
+    public int startFood = 0;
     public int food = 0;
+    public int startLoot = 0;
     public int loot = 0;
     public int weapons = 0;
     
@@ -76,6 +78,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void Update()
     {
+        GameTileBehaviour obj = lastLookedAtObject.GetComponent<GameTileBehaviour>();
         if(gameLogic.gameStarted && !gameLogic.menuEnabled)
         {
             float moveDistance = 1.0f;
@@ -87,7 +90,14 @@ public class PlayerBehaviour : MonoBehaviour
                 }
                 else if (transform.localRotation.y == 0.0f && !pathisBlocked)
                 {
-                    PlayerConsumeFood(1);
+                    if(obj.tileType == GameTileTypes.IslandTile)
+                    {
+                        PlayerConsumeFood(2);
+                    }
+                    else
+                    {
+                        PlayerConsumeFood(1);
+                    }
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
                     transform.position = newPosition;
                 }
@@ -100,7 +110,14 @@ public class PlayerBehaviour : MonoBehaviour
                 }
                 else if (transform.localRotation.y == 1.0f && !pathisBlocked)
                 {
-                    PlayerConsumeFood(1);
+                    if(obj.tileType == GameTileTypes.IslandTile)
+                    {
+                        PlayerConsumeFood(2);
+                    }
+                    else
+                    {
+                        PlayerConsumeFood(1);
+                    }
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
                     transform.position = newPosition;
                 }
@@ -113,7 +130,14 @@ public class PlayerBehaviour : MonoBehaviour
                 }
                 else if (transform.localRotation.y == -0.7071068f && !pathisBlocked)
                 {
-                    PlayerConsumeFood(1);
+                    if(obj.tileType == GameTileTypes.IslandTile)
+                    {
+                        PlayerConsumeFood(2);
+                    }
+                    else
+                    {
+                        PlayerConsumeFood(1);
+                    }
                     Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
                     transform.position = newPosition;
                 }
@@ -126,7 +150,14 @@ public class PlayerBehaviour : MonoBehaviour
                 }
                 else if (transform.localRotation.y == 0.7071068f && !pathisBlocked)
                 {
-                    PlayerConsumeFood(1);
+                    if(obj.tileType == GameTileTypes.IslandTile)
+                    {
+                        PlayerConsumeFood(2);
+                    }
+                    else
+                    {
+                        PlayerConsumeFood(1);
+                    }
                     Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
                     transform.position = newPosition;
                 }
@@ -163,16 +194,33 @@ public class PlayerBehaviour : MonoBehaviour
 
             if(obj.tileType != GameTileTypes.WaterTile)
             {
-                obj.EnableActionIndicator();
+                if(transform.localRotation.y == 0.0f)
+                {
+                    obj.EnableActionIndicator(Vector3.forward); 
+                }
+                else if(transform.localRotation.y == 0.7071068f)
+                {
+                    obj.EnableActionIndicator(Vector3.right);  
+                }
+                else if(transform.localRotation.y == 1.0f)
+                {
+                    obj.EnableActionIndicator(Vector3.back);
+                }
+                else
+                {
+                    obj.EnableActionIndicator(Vector3.left);
+                }
+
+                
             }
         }
     }
 
     public void InitialisePlayer()
     {
-        food = 24;
+        food = startFood;
         crew = Random.Range(36,41);
-        loot = 5;
+        loot = startLoot;
         weapons = 0;
         RandomisePlayer();
     }

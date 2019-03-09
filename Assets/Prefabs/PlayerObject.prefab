@@ -107,11 +107,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameLogic: {fileID: 0}
   playerName: 
+  father: 
+  mother: 
+  month: 
   playerAttribute: 
   shipName: 
+  vinland: 
   personalPronoun: 
   playerGender: 0
+  lastLookedAtObject: {fileID: 0}
   rotationTime: 0
+  pathisBlocked: 0
   crew: 0
   food: 0
   loot: 0

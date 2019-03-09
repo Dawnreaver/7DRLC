@@ -79,7 +79,12 @@ public class InterfaceBehaviour : MonoBehaviour
                     if( obj.tileType == GameTileTypes.TraderTile || obj.tileType == GameTileTypes.VillageTile || obj.tileType == GameTileTypes.StartVillageTile)
                     {
                         EnableActionScreen();
-                        actionScreen.GetComponent<ActionScreenBehaviour>().AdjustActionDialogue(obj.tileType, obj.name);  
+                        actionScreen.GetComponent<ActionScreenBehaviour>().AdjustActionDialogue(obj.tileType, obj.name);
+                        if(!playerInventoryOpened)
+                        {
+                            playerInventoryOpened = !playerInventoryOpened;
+                            StartCoroutine("OpenCloseInventory");
+                        }
                     }
                 }
             }
@@ -94,11 +99,13 @@ public class InterfaceBehaviour : MonoBehaviour
     public void EnableActionScreen()
     {
         actionScreen.SetActive(true);
+        gameLogic.menuEnabled = true;
     }
 
     public void DisableActionScreen()
     {
         actionScreen.SetActive(false);
+        gameLogic.menuEnabled = false;
     }
 
     public void LoadGame()

@@ -22,7 +22,7 @@ public class ActionScreenBehaviour : MonoBehaviour
     // Ransack 
     public GameObject ButtonRansack;
 
-    void FixedUpdate()
+    void Update()
     {
         if(m_playerBehaviour == null)
         {
@@ -33,12 +33,12 @@ public class ActionScreenBehaviour : MonoBehaviour
             ButtonTradeFood.GetComponent<Button>().interactable = false;
             ButtonTradeWeapon.GetComponent<Button>().interactable = false;
         }
-        else if(m_playerBehaviour.loot > 1 && m_playerBehaviour.loot < 5)
+        if(m_playerBehaviour.loot > 1 && m_playerBehaviour.loot < 5)
         {
             ButtonTradeFood.GetComponent<Button>().interactable = true;
             ButtonTradeWeapon.GetComponent<Button>().interactable = false;
         }
-        else
+        if(m_playerBehaviour.loot >= 5)
         {
             ButtonTradeFood.GetComponent<Button>().interactable = true;
             ButtonTradeWeapon.GetComponent<Button>().interactable = true;
@@ -107,5 +107,4 @@ public class ActionScreenBehaviour : MonoBehaviour
         ButtonTradeFood.SetActive(false);
         ButtonRansack.SetActive(false);
     }
-
 }

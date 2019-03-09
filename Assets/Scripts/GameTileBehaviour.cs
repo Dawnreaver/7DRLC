@@ -33,7 +33,7 @@ public class GameTileBehaviour : MonoBehaviour
 
     void FixedUpdate()
     { 
-        if(actionIndicator != null)
+        if(actionIndicator != null && tileType == GameTileTypes.VinlandTile || actionIndicator != null && tileType == GameTileTypes.StartVillageTile || actionIndicator != null && tileType == GameTileTypes.SecretTile)
         {
             actionIndicator.transform.Rotate(Vector3.up, m_actionIndicatorRotationSpeed*Time.deltaTime);
         }        
@@ -42,80 +42,117 @@ public class GameTileBehaviour : MonoBehaviour
     {
         tileType = type;
         AdjustTileMaterial();
-        //AdjustTileMesh();
+        AdjustGameTileObjectMesh();
         InitialiseInteractableObject();
     }
 
     private void AdjustTileMaterial()
     {
+        gameObject.GetComponent<Renderer>().material = gameTileMaterials[Random.Range(1,4)];
         switch(tileType)
         {
             case GameTileTypes.StartVillageTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[0];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[0];
                 gameTileObject.tag="StartVillageTile";
             break;
 
             case GameTileTypes.WaterTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[Random.Range(1,4)];
                 gameTileObject.SetActive(false);
                  gameTileObject.tag="WaterTile";
             break;
 
             case GameTileTypes.VillageTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[4];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[4];
                 gameTileObject.tag="VillageTile";
             break;
 
             case GameTileTypes.IslandTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[5];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[5];
                 gameTileObject.tag="IslandTile";
             break;
 
              case GameTileTypes.TraderTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[8];
                 gameTileObject.SetActive(true);
-                gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[8];
+                gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[9];
                 gameTileObject.tag="TraderTile";
             break;
 
             case GameTileTypes.PirateTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[6];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[6];
                 gameTileObject.tag="PirateTile";
             break;
 
             case GameTileTypes.SerpentTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[6];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[6];
                  gameTileObject.tag="SerpentTile";
             break;
 
             case GameTileTypes.MaelstromTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[6];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[6];
                  gameTileObject.tag="MaelstromTile";
             break;
 
             case GameTileTypes.VinlandTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[7];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[7];
                 gameTileObject.tag="VinlandTile";
             break;
             case GameTileTypes.SecretTile :
-                gameObject.GetComponent<Renderer>().material = gameTileMaterials[8];
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[8];
                 gameTileObject.tag="SecretTile";
+            break;
+        }
+    }
+
+    void AdjustGameTileObjectMesh()
+    {
+        MeshFilter obj = gameTileObject.GetComponent<MeshFilter>();
+        switch(tileType)
+        {
+            case GameTileTypes.StartVillageTile :
+                obj.mesh = gameTileMeshes[0];
+            break;
+
+            /*case GameTileTypes.WaterTile :
+                
+            break; */
+
+            case GameTileTypes.VillageTile :
+                obj.mesh = gameTileMeshes[1];
+            break;
+
+            case GameTileTypes.IslandTile :
+                obj.mesh = gameTileMeshes[2];
+            break;
+
+            case GameTileTypes.TraderTile :
+                obj.mesh = gameTileMeshes[3];
+            break;
+
+            case GameTileTypes.PirateTile :
+                obj.mesh = gameTileMeshes[4];
+            break;
+
+            case GameTileTypes.SerpentTile :
+                obj.mesh = gameTileMeshes[5];
+            break;
+
+            case GameTileTypes.MaelstromTile :
+                obj.mesh = gameTileMeshes[6];
+            break;
+
+            case GameTileTypes.VinlandTile :
+                obj.mesh = gameTileMeshes[7];
+            break;
+            case GameTileTypes.SecretTile :
+                obj.mesh = gameTileMeshes[8];
             break;
         }
     }
@@ -164,10 +201,22 @@ public class GameTileBehaviour : MonoBehaviour
             break;
         }
     }
-
-    public void EnableActionIndicator()
+    public void EnableActionIndicator(Vector3 playerLookDiretion)
     {
         actionIndicator.SetActive(true);
+        if(tileType == GameTileTypes.IslandTile)
+        {
+            actionIndicator.transform.rotation = Quaternion.LookRotation(playerLookDiretion,Vector3.up);
+        }
+        else if(tileType == GameTileTypes.VillageTile || tileType == GameTileTypes.TraderTile)
+        {
+            actionIndicator.transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+        }
+        else if(tileType == GameTileTypes.PirateTile || tileType == GameTileTypes.SerpentTile)
+        {
+            actionIndicator.transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+        }
+
     }
 
     public void DisableActionIndicator()

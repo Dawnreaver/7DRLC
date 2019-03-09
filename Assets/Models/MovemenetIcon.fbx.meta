@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fe8f32fb632c4ee458d8edc06a38069c
+guid: f0ab081fe0e3965408d9ac8abe013637
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,7 +8,7 @@ ModelImporter:
     2100000: palette1
     2300000: //RootNode
     3300000: //RootNode
-    4300000: SfVMovement
+    4300000: MovementIcon
   externalObjects: {}
   materials:
     importMaterials: 1

@@ -6418,6 +6418,8 @@ MonoBehaviour:
   playerObjectPrefab: {fileID: 2215393417067776187, guid: 4b0665e97ef771349b55d69040d681ba,
     type: 3}
   playerObject: {fileID: 0}
+  playerStartFood: 24
+  playerStartLoot: 5
   mainCamera: {fileID: 534669906}
   cameraMOvementSpeed: 10
   gameStarted: 0

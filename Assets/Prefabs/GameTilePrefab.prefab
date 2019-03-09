@@ -179,19 +179,30 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 08d56fdb2f028df408c53b09c05d969d, type: 2}
   - {fileID: 2100000, guid: 6d75d1b3d55244347b73f0586583612c, type: 2}
   - {fileID: 2100000, guid: 54d6ee90c9c5fc64ca2746a1351b7aae, type: 2}
-  - {fileID: 2100000, guid: b57cf5cd91e4b324a9e3694843fad38e, type: 2}
-  gameTileMeshes: []
+  - {fileID: 2100000, guid: ccade222d10b60943aa4c9eac2fad6bb, type: 2}
+  - {fileID: 2100000, guid: 873eab2454f8db14a95ae2bf3467c357, type: 2}
+  gameTileMeshes:
+  - {fileID: 4300000, guid: fb88e7003bee47a4c94e312a97be5db8, type: 3}
+  - {fileID: 4300000, guid: 14d1c2b5c6a9aa046ab0d4de67abe949, type: 3}
+  - {fileID: 4300000, guid: 5922826473ebc4942a2039f1f8b54421, type: 3}
+  - {fileID: 4300000, guid: 0af6e908d84ad404c9e6e5cce5d1a1de, type: 3}
+  - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
+  - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
+  - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
+  - {fileID: 4300000, guid: 589587d10bb42f4408b988c39b52f9f5, type: 3}
+  - {fileID: 4300000, guid: bed4a30c1201fef4292ea4aad9be0c35, type: 3}
   gameTileObject: {fileID: 2267258905528978517}
   tileType: 0
   isStartAreaTile: 0
   actionIndicatorMesh:
   - {fileID: 4300000, guid: d19aaf8236da8ba478fb2699478b0b18, type: 3}
   - {fileID: 4300000, guid: caced92c884036643bfe79ff97d7a560, type: 3}
-  - {fileID: 4300000, guid: fe8f32fb632c4ee458d8edc06a38069c, type: 3}
-  - {fileID: 4300004, guid: caced92c884036643bfe79ff97d7a560, type: 3}
+  - {fileID: 4300000, guid: f0ab081fe0e3965408d9ac8abe013637, type: 3}
+  - {fileID: 4300000, guid: b8ed140ecb7ba3a42998d8f7f834b0f7, type: 3}
   - {fileID: 4300000, guid: d585d78e76c51b544962f1d4ac030c23, type: 3}
   - {fileID: 4300002, guid: caced92c884036643bfe79ff97d7a560, type: 3}
   actionIndicator: {fileID: 1217605460}
+  name: 
 --- !u!65 &7825716446328258118
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -274,6 +285,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
 --- !u!1 &2267258905528978517 stripped

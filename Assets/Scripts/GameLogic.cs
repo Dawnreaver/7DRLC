@@ -30,6 +30,9 @@ public class GameLogic : MonoBehaviour
     private Vector3 m_playerPosition;
     private Vector3 m_oldPlayerPosition;
 
+    public int playerStartFood = 48;
+    public int playerStartLoot = 5;
+
     // Camera
     public MainCameraBehaviour mainCamera;
     public float cameraMOvementSpeed = 5.0f;
@@ -210,13 +213,38 @@ public class GameLogic : MonoBehaviour
         {
             playerObject = Instantiate(playerObjectPrefab,transform.position, Quaternion.identity) as GameObject;
             playerObject.name = "PlayerObject";
-            playerObject.transform.position = gameTileStartPosition;
+            PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+            int randomPlayerPosition = Random.Range(0,4);
+
+            if(randomPlayerPosition == 0)
+            {
+                playerObject.transform.position = new Vector3(gameTileStartPosition.x,0.0f,gameTileStartPosition.z+1);
+                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+            }
+            else if(randomPlayerPosition == 1)
+            {
+                playerObject.transform.position = new Vector3(gameTileStartPosition.x+1,0.0f,gameTileStartPosition.z);
+                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+            }
+            else if(randomPlayerPosition == 2)
+            {
+                playerObject.transform.position = new Vector3(gameTileStartPosition.x,0.0f,gameTileStartPosition.z-1);
+                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+            }
+            else
+            {
+                playerObject.transform.position = new Vector3(gameTileStartPosition.x-1,0.0f,gameTileStartPosition.z);
+                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
+            }
+            
             mainCamera.followObject = playerObject;
             mainCamera.SetStartPosition();
-            playerObject.GetComponent<PlayerBehaviour>().gameLogic = this;
-
+            obj.gameLogic = this;
+            obj.startFood = playerStartFood;
+            obj.startLoot = playerStartLoot;
             // perform any actions to randomise the playe
-            playerObject.GetComponent<PlayerBehaviour>().InitialisePlayer();
+            obj.InitialisePlayer();
             // actions defined in player script? 
         }
     void SpawnAndDespawnBoardTiles()
@@ -506,27 +534,23 @@ public class GameLogic : MonoBehaviour
         }
         else
         {
-            obj.weapons -= 1;
+            obj.weapons -= 1; 
+        }
+        if(tile.tileType == GameTileTypes.TraderTile)
+        {
+            obj.loot += 1+ Random.Range(1,4);
+            //obj.weapons += 1+ Random.Range(1,3);
+            Debug.Log("Raided a trader...");
 
-            if(tile.tileType == GameTileTypes.TraderTile)
-            {
-                obj.loot += 1+ Random.Range(1,4);
-                obj.weapons += 1+ Random.Range(1,3);
-                Debug.Log("Raided a trader...");
+            // play effect
+        }
+        else if(tile.tileType == GameTileTypes.VillageTile)
+        {
+            obj.loot += 1+ Random.Range(0,3);
+            obj.food += 1+ Random.Range(1,4);
+            Debug.Log("Raided a village...");
 
-                // play effect
-            }
-            else if(tile.tileType == GameTileTypes.VillageTile)
-            {
-                obj.loot += 1+ Random.Range(0,3);
-                obj.food += 1+ Random.Range(1,4);
-                Debug.Log("Raided a village...");
-
-                // play effect
-            }
-
-            
-            
+            // play effect
         }
         // turn ransacked game tile into an island
         gameTilesDictionary.Remove(tile.ReturnPosition());
