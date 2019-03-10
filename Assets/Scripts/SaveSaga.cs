@@ -6,6 +6,7 @@ using System.IO;
 
 public class SaveSaga : MonoBehaviour 
 {
+    public GameLogic gameLogic;
     // saga content
     public List<Sprite> borderDecoration = new List<Sprite>();
     public RectTransform rectT; // Assign the UI element which you wanna capture
@@ -36,7 +37,7 @@ public class SaveSaga : MonoBehaviour
         GameObject start = Instantiate(startOfSagaPrefab, new Vector3(rectT.rect.x,rectT.rect.y,0.0f), Quaternion.identity) as GameObject;
         start.transform.SetParent(contentObject.transform);
         start.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
-        start.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectT.rect.width/2,-100.0f);
+        start.GetComponent<RectTransform>().anchoredPosition = new Vector2(0.0f,-100.0f);
     }
 
     public void AddSagaContent(string content, GameTileTypes tileType = GameTileTypes.WaterTile)
@@ -45,17 +46,28 @@ public class SaveSaga : MonoBehaviour
         sagaContent.name = "Saga Content "+m_sagaContentCount;
         sagaContent.transform.SetParent(contentObject.transform);
         sagaContent.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
-        sagaContent.GetComponent<RectTransform>().anchoredPosition = new Vector2(rectT.rect.width/2,-sagaContentStartY-(sagaContentHight*m_sagaContentCount));
+        sagaContent.GetComponent<RectTransform>().anchoredPosition = new Vector2(0.0f,-sagaContentStartY-(sagaContentHight*m_sagaContentCount));
         
         sagaContent.GetComponent<SagaContentBehaviour>().SetText(content);
         m_sagaContentCount += 1;
+        rectT.sizeDelta = new Vector2(rectT.rect.width,rectT.rect.height+sagaContentHight);
+    }
+
+    public void AddSagaEnd()
+    {
+        GameObject end = Instantiate(endOfSagaPrefab, new Vector3(rectT.rect.x,rectT.rect.y,0.0f), Quaternion.identity) as GameObject;
+        end.name = "Saga End";
+        end.transform.SetParent(contentObject.transform);
+        end.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+        end.GetComponent<RectTransform>().anchoredPosition = new Vector2(0.0f,-sagaContentStartY-(sagaContentHight*m_sagaContentCount));
+        rectT.sizeDelta = new Vector2(rectT.rect.width,rectT.rect.height+sagaContentHight);
     }
 
     // Update is called once per frame
-    void Update()
+    public void RecordSaga()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
             if (rectT != null)
             {
                 if (rectT.root.GetComponent<CanvasScaler>().uiScaleMode == CanvasScaler.ScaleMode.ScaleWithScreenSize)
@@ -81,7 +93,7 @@ public class SaveSaga : MonoBehaviour
                 Debug.Log("Rect transform is null to capture the screenshot, hence fullscreen has been taken.");
                 ScreenCapture.CaptureScreenshot("FullPageScreenShot.png");
             }
-        }
+        //}
     }
 
     private void createCanvasWithRectTransform()
@@ -138,8 +150,9 @@ public class SaveSaga : MonoBehaviour
         var bytes = tex.EncodeToPNG();
         Destroy(tex);
 
+        string fileName = "/Saga of "+gameLogic.playerObject.GetComponent<PlayerBehaviour>().playerName+" - "+Time.timeSinceLevelLoad;
         //Writing bytes to a file
-        File.WriteAllBytes(Application.dataPath + "/Saga of CHARACTERNAME"+Time.timeSinceLevelLoad+".png", bytes);
+        File.WriteAllBytes(Application.dataPath + fileName+".png", bytes);
 
         //In case of ScaleMode was not ScaleWithScreenSize, parent will not be assigned then no need to revert the changes
         if (rectTransformParent != null)

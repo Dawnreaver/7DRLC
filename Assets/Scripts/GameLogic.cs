@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
+    public InterfaceBehaviour gameInterface;
 // map generation
     // game tiles
     public List<GameObject> gameTilesPool = new List<GameObject>();
@@ -41,10 +42,10 @@ public class GameLogic : MonoBehaviour
     public bool gameStarted = false;
     public bool menuEnabled = false;
     public int numberOfNewSpawnedTiles = 0;
-    public int vinlandTileThreshold = 100;
+    public int vinlandTileThreshold = 150;
     public bool vinlandTileHasSpawned = false;
-    public int secretTileTreshold =50;
-    public bool secretTileHasSpawned = false;
+
+    public int uneventfulJourneyCount = 0;
 
     List<string> m_villageNames = new List<string>()
     {
@@ -190,10 +191,10 @@ public class GameLogic : MonoBehaviour
                         gameTile.SetTileType(GameTileTypes.StartVillageTile);
                         gameTile.name = ReturnRandomString(m_villageNames);
                     }
-                    else if(x == 2+ mainVillageStartPosition.x && z == (int)mainVillageStartPosition.z)
+                    /* else if(x == 2+ mainVillageStartPosition.x && z == (int)mainVillageStartPosition.z)
                     {
                         gameTile.SetTileType(GameTileTypes.VinlandTile);
-                    }
+                    }*/
                     else
                     {
                         tile.name = "GameTile";
@@ -292,6 +293,10 @@ public class GameLogic : MonoBehaviour
                         tile.transform.position = potentialSpawnPositions[b];
                         GameTileTypes tileType = ChooseRandomGameTile();
                         tile.GetComponent<GameTileBehaviour>().SetTileType(tileType);
+                        if(tileType == GameTileTypes.SerpentTile || tileType == GameTileTypes.PirateTile)
+                        {
+                            TurnGameTileRandomly(tile);
+                        }
                         tile.SetActive(true);
                         gameTilesDictionary.Add(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z),tileType);
                         gameTilesPool.Remove(tile);
@@ -305,15 +310,19 @@ public class GameLogic : MonoBehaviour
                 }
                 else if(gameTilesDictionary.TryGetValue(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z), out type) && !IsTileInUse(potentialSpawnPositions[b]) && !IsTileNotAStartTile(potentialSpawnPositions[b]))
                 {
-                    Debug.Log("Tile is part of the dictionary, but needs to be re-spawned");
+                    //Debug.Log("Tile is part of the dictionary, but needs to be re-spawned");
                     if(gameTilesPool.Count >= 1)
                    {
-                       tile = gameTilesPool[gameTilesPool.Count-1];
-                       tile.transform.position = potentialSpawnPositions[b];
-                       tile.GetComponent<GameTileBehaviour>().SetTileType(type);
-                       tile.SetActive(true);
-                       gameTilesPool.Remove(tile);
-                       usedGameTiles.Add(tile);
+                        tile = gameTilesPool[gameTilesPool.Count-1];
+                        tile.transform.position = potentialSpawnPositions[b];
+                        tile.GetComponent<GameTileBehaviour>().SetTileType(type);
+                        if(type == GameTileTypes.SerpentTile || type == GameTileTypes.PirateTile)
+                        {
+                            TurnGameTileRandomly(tile);
+                        }
+                        tile.SetActive(true);
+                        gameTilesPool.Remove(tile);
+                        usedGameTiles.Add(tile);
                    }
                    else
                    {
@@ -430,12 +439,14 @@ public class GameLogic : MonoBehaviour
 
     public GameTileTypes ChooseRandomGameTile()
     {
-        GameTileTypes randomTile;
+        GameTileTypes randomTile = GameTileTypes.WaterTile;
 
         float randomValue;
+        float randomEventTile;
         
         randomValue = Random.Range(0.0f,1.0f);
         //Debug.Log("randomValue: "+randomValue);
+        randomEventTile = Random.Range(0.0f,1.0f);
 
         if(randomValue <= 0.85f)
         {
@@ -443,10 +454,62 @@ public class GameLogic : MonoBehaviour
         }
         else
         {
-            randomTile = (GameTileTypes) Random.Range(3,7); // Excluded - 1: StartVillageTile 2: VinlandTile 3: WaterTile 7: SecretTile
+            if(randomEventTile <= 0.20f)
+            {
+                if(!vinlandTileHasSpawned && numberOfNewSpawnedTiles < vinlandTileThreshold )
+                {
+                    randomTile = GameTileTypes.IslandTile;
+                }
+                else if(! vinlandTileHasSpawned && numberOfNewSpawnedTiles >= vinlandTileThreshold)
+                {
+                     randomTile = GameTileTypes.VinlandTile;
+                     vinlandTileHasSpawned = true;
+                }
+                else if(vinlandTileHasSpawned && numberOfNewSpawnedTiles >= vinlandTileThreshold)
+                {
+                    randomTile = GameTileTypes.IslandTile;
+                }
+            }
+            else if(randomEventTile >0.20f && randomEventTile <= 0.40f)
+            {
+                randomTile = GameTileTypes.VillageTile;
+            }
+            else if(randomEventTile > 0.40f && randomEventTile <= 0.60f)
+            {
+                randomTile = GameTileTypes.TraderTile;
+            }
+            else if(randomEventTile > 0.60f && randomEventTile <= 0.80f)
+            {
+                randomTile = GameTileTypes.PirateTile;
+            }
+            else if(randomEventTile > 0.80f && randomEventTile <= 1.0f)
+            {
+                randomTile = GameTileTypes.SerpentTile;
+            }
         }
-
         return randomTile;
+    }
+
+    void TurnGameTileRandomly(GameObject gameTile)
+    {
+        int randomGameTileRotation = Random.Range(0,4);
+
+            if(randomGameTileRotation == 0)
+            {
+                gameTile.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+            }
+            else if(randomGameTileRotation == 1)
+            {
+                gameTile.transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+            }
+            else if(randomGameTileRotation == 2)
+            {
+                gameTile.transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+            }
+            else
+            {
+                gameTile.transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
+            }
     }
 
      public string ReturnRandomString(List<string> strings, string unique = null)
@@ -500,10 +563,98 @@ public class GameLogic : MonoBehaviour
         }
         return randomString;
     }
-
     public void RetireFromAdventure()
     {
-        Debug.Log("End game early");
+        GenerateEndGameEarly();
+        
+    }
+
+    public void WinGame()
+    {
+        GenerateFoundVinland();
+        sagaLogic.AddSagaEnd();
+        menuEnabled = true;
+        gameInterface.EnableEndGameScreenWin();
+    }
+    public void LoseGame()
+    {
+        sagaLogic.AddSagaEnd();
+        menuEnabled = true;
+        gameInterface.EnableEndGameScreenLose();
+    }
+
+    public void AttackGameTile(GameObject gameTile)
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+        GameTileBehaviour tile = gameTile.GetComponent<GameTileBehaviour>();
+        if(tile.tileType == GameTileTypes.PirateTile)
+        {
+            if(obj.weapons == 0)
+            {
+                obj.crew -= Random.Range(20,31);
+                if( obj.crew < 0)
+                {
+                    obj.crew = 0; 
+                    GenerateEndFailedPirate();
+                    LoseGame();
+                    return;
+                }
+                else
+                {
+                    PurgeGameTile(tile, GameTileTypes.WaterTile);
+                    obj.loot += Random.Range(3,10);
+                    obj.food += Random.Range(1,4);
+                    GenerateBeatPirate();
+                }
+            }
+            else if(obj.weapons > 0)
+            {
+                obj.weapons -= 1;
+                obj.crew -= Random.Range(1,4);
+                if( obj.crew < 0)
+                {
+                    obj.crew = 0; 
+                    GenerateEndFailedPirate();
+                    LoseGame();
+                    return;
+                }
+                else
+                {
+                    PurgeGameTile(tile, GameTileTypes.WaterTile);
+                    obj.loot += Random.Range(3,10);
+                    obj.food += Random.Range(1,4);
+                    GenerateBeatPirate();
+                }
+
+            }
+        }
+
+        if(tile.tileType == GameTileTypes.SerpentTile)
+        {
+            if(obj.weapons == 0)
+            {
+                GenerateEndFailedSerpent();
+                LoseGame();
+                return;
+            }
+            else
+            {
+                int noOfWeapons = obj.weapons;
+                obj.weapons = 0;
+
+                PurgeGameTile(tile, GameTileTypes.WaterTile);
+                obj.loot += (noOfWeapons*2)+Random.Range(1,4);
+                GenerateMovedSerpent();
+            }
+        }
+
+    }
+
+    public void PurgeGameTile(GameTileBehaviour tileToPurge, GameTileTypes type)
+    {
+        gameTilesDictionary.Remove(tileToPurge.ReturnPosition());
+        tileToPurge.SetTileType (type);
+        gameTilesDictionary.Add(tileToPurge.ReturnPosition(),type);
     }
 
     public void RansackGameTile()
@@ -522,12 +673,16 @@ public class GameLogic : MonoBehaviour
 
                 if(tile.tileType == GameTileTypes.TraderTile)
                 {
+                    GenerateEndFailedRansack();
                     Debug.Log("Died while rading a trader...");
+                    LoseGame();
                     return;
                 }
                 else if(tile.tileType == GameTileTypes.VillageTile)
                 {
+                    GenerateEndFailedRansack();
                     Debug.Log("Died while rading a village...");
+                    LoseGame();
                     return;
                 }
             }
@@ -541,6 +696,7 @@ public class GameLogic : MonoBehaviour
             obj.loot += 1+ Random.Range(1,4);
             //obj.weapons += 1+ Random.Range(1,3);
             Debug.Log("Raided a trader...");
+            GenerateRaidedTrader();
 
             // play effect
         }
@@ -549,13 +705,12 @@ public class GameLogic : MonoBehaviour
             obj.loot += 1+ Random.Range(0,3);
             obj.food += 1+ Random.Range(1,4);
             Debug.Log("Raided a village...");
+            GenerateRaidedVillage();
 
             // play effect
         }
         // turn ransacked game tile into an island
-        gameTilesDictionary.Remove(tile.ReturnPosition());
-        tile.SetTileType (GameTileTypes.IslandTile);
-        gameTilesDictionary.Add(tile.ReturnPosition(),tile.tileType);
+        PurgeGameTile(tile, GameTileTypes.IslandTile);
     }
 
     public void TradeFood()
@@ -564,7 +719,8 @@ public class GameLogic : MonoBehaviour
 
         obj.loot -= 1;
         obj.food +=5;
-        // spawn some form of effects ? 
+        // spawn some form of effects ?
+        GenerateVillageTrade();
     }
 
     public void TradeWeapon()
@@ -573,6 +729,203 @@ public class GameLogic : MonoBehaviour
 
         obj.loot -= 5;
         obj.weapons +=1;
-        // spawn some form of effects ? 
+        // spawn some form of effects ?
+        GenerateTraderTrade();
+    }
+
+    // Strings for saga
+
+    //fails 
+
+     List<string> m_endGameEarlyStrings = new List<string>();
+
+    void GenerateEndGameEarly()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_endGameEarlyStrings = new List<string>(){
+        "And so "+obj.playerName+ " returned with a cerw of "+ obj.crew + " without having set sight on " + obj.vinland+".",
+        "Finishing their journey early "+obj.playerName+ " and " + obj.personalPronoun + " crew could only hope to find "+ obj.vinland + " on their next voyage",
+        ""+obj.playerName+ " received an urgent message from "+ obj.father+ " and "+obj.mother+". The search for " + obj.vinland + " would have to wait for another time."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_endGameEarlyStrings));
+    }
+
+    List<string> m_endGameStarvationStrings = new List<string>();
+
+    public void GenerateEndGameStarvation()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_endGameStarvationStrings = new List<string>(){
+        "A good death is it's own reward, but "+obj.playerName+ " and "+ obj.personalPronoun +" crew would never know. Without food they perished one after the other until even "+obj.playerName+" had to submit to <color=red> Hel's<c/color> call.",
+        ""+obj.playerName+ " and "+ obj.personalPronoun + " crew were able seaman and warriors, but even the hardiest Viking has to submit to hunger. They perished on their search for "+obj.vinland +" never to be seen again",
+        "Oh norns, that you would have forseen the death of "+obj.playerName+obj.playerAttribute+ obj.father+ " and "+obj.mother+"by such a cruel thing as hunger. May <color=red> Hel<c/color> be mericiful on their souls."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_endGameStarvationStrings));
+    }
+
+    List<string> m_endGameFailedRansackStrings = new List<string>();
+
+    public void GenerateEndFailedRansack()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_endGameFailedRansackStrings = new List<string>(){
+        "They say when you push a man or a woman too much over the edge, they will become bigger than life itself and, with a bit of help of <color=red>Tyr</color> or <color=red>Loki</color>even a pesant or simple trader will bring down a warrior.",
+        "When "+obj.playerName+ " and "+ obj.personalPronoun +" crew tried to ransack the island, they were defeat to the last men and woman, by the desperate islanders defening their homes.",
+        "Who would have thought that the norns foresaw this fate for "+obj.playerName+ "and "+ obj.personalPronoun +" crew? Everyone slay on the raid on an island. The messengers will have to cary sad new to Jarl"+ obj.father+ " and "+obj.mother+ " on this fateful day."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_endGameFailedRansackStrings));
+    }
+
+    List<string> m_endGameFailedPirateStrings = new List<string>();
+
+    public void GenerateEndFailedPirate()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_endGameFailedPirateStrings = new List<string>(){
+        "And so our hero "+obj.playerName+" and all of the brave men and woman of "+obj.shipName+" were masacred by pirates."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_endGameFailedPirateStrings));
+    }
+
+    List<string> m_endGameFailedSerpentStrings = new List<string>();
+
+    public void GenerateEndFailedSerpent()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_endGameFailedSerpentStrings = new List<string>()
+        {
+        "With the shake of Jörmungandr's body "+obj.shipName+" was smashed, and even the best swimmers drowned in the wake of the its body's wave. <color=red>Rán</color> and her daughters readily took care of " +obj.playerName+ " and all "+obj.crew+ " of "+ obj.personalPronoun +" crew."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_endGameFailedSerpentStrings));
+    }
+
+    // uneventful
+
+    List<string> m_uneventfulJurneyStrings = new List<string>();
+    public void GenerateUneventfulJourney()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_uneventfulJurneyStrings = new List<string>(){
+        ""+obj.playerName+ " and "+ obj.personalPronoun +" crew travelled for several days. They passed a few islands some settled, others not.",
+        "As the journey was uneventful for a couple of days, " +obj.playerName+ " and "+ obj.personalPronoun +" crew took good care of" + obj.shipName + "to make sure the vessle woul dbe ready when needed.",
+        "The journey was uneventful and for a crew of "+obj.crew+" there was only so much game of dice before even those got boring. With well chosen words "+obj.playerName+" ralleyed the spirits of "+obj.playerAttribute +" warriors. Envigorated they continued."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_uneventfulJurneyStrings));
+    }
+    // moving across islands
+    List<string> m_crossIslandsStrings = new List<string>();
+    public void GenerateCrossIslands()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_crossIslandsStrings = new List<string>(){
+        "The shortest way was crossing the island. "+obj.playerName+ " and "+ obj.personalPronoun +" crew made landfall and used ropes and pulleys to get the ship across the island. Hard working warriors need sustenance and so they feasted after reaching the other side."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_crossIslandsStrings));
+    }
+
+
+    // successfull
+
+    List<string> m_raidedVillageStrings = new List<string>();
+    public void GenerateRaidedVillage()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_raidedVillageStrings = new List<string>(){
+        ""+obj.playerName+ " and "+ obj.personalPronoun +" crew ransacked a village and loaded the spoils into "+obj.shipName
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_raidedVillageStrings));
+    }
+
+    List<string> m_villageTradeStrings = new List<string>();
+    public void GenerateVillageTrade()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_villageTradeStrings = new List<string>(){
+        ""+obj.playerName+" traded provisions, meat and mead, in the village to continue the search for "+obj.vinland
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_villageTradeStrings));
+    }
+
+    List<string> m_raidedTraderStrings = new List<string>();
+    public void GenerateRaidedTrader()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_raidedTraderStrings = new List<string>(){
+        ""+obj.playerName+ " and "+ obj.personalPronoun +" crew ransacked the trading ost and left nothing whole."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_raidedTraderStrings));
+    }
+
+    List<string> m_traderTradeStrings = new List<string>();
+    public void GenerateTraderTrade()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_traderTradeStrings = new List<string>(){
+        "Every warrior knows that a good weapon is worth it's weight in gold. So "+obj.playerName+" made sure that the journey to "+obj.vinland+ " would be well equipped."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_traderTradeStrings));
+    }
+
+     List<string> m_beatPirateStrings = new List<string>();
+
+    public void GenerateBeatPirate()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_beatPirateStrings = new List<string>(){
+        "And so our hero "+obj.playerName+" and all of the brave men and woman of "+obj.shipName+" were masacred by pirates."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_beatPirateStrings));
+    }
+
+    List<string> m_movedSerpentStrings = new List<string>();
+
+    public void GenerateMovedSerpent()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_movedSerpentStrings = new List<string>()
+        {
+        "With courage "+obj.playerName+ " and "+ obj.personalPronoun +" warriors the curls of Jörmungandr's body. It moved the curl that blocked "+obj.shipName+" and dislodged by the thrown weapons, trease was found afloat, ready to be collected by "+obj.playerName+"'s crew."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_movedSerpentStrings));
+    }
+
+    List<string> m_findingVinlandStrings = new List<string>();
+
+    public void GenerateFoundVinland()
+    {
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        m_findingVinlandStrings = new List<string>()
+        {
+        "After a long journey "+obj.playerName+ " and "+ obj.personalPronoun +" warriors layed eyed on the place of myth and legend: "+obj.vinland+"! Long will the skald tell the tale of "+obj.playerName+" and "+ obj.personalPronoun +obj.shipName+ " and the men and woman that journey to the end of the know world."
+        };
+
+        sagaLogic.AddSagaContent(ReturnRandomString(m_findingVinlandStrings));
     }
 }

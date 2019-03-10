@@ -9,8 +9,8 @@ public class ActionScreenBehaviour : MonoBehaviour
     public InterfaceBehaviour gameInterface;
     private PlayerBehaviour m_playerBehaviour;
     
-    public Text tileName;
-    public Text name;
+    public Text gameTileName;
+    public Text settlementName;
 // Action buttons
     // home village 
     public GameObject ButtonRetire;
@@ -52,22 +52,24 @@ public class ActionScreenBehaviour : MonoBehaviour
         switch(m_gameTile)
         {
             case GameTileTypes.VillageTile :
-                name.text = nameString;
-                tileName.text ="- Village -";
+                settlementName.text = nameString;
+                gameTileName.text ="- Village -";
                 ButtonTradeFood.SetActive(true);
                 ButtonRansack.SetActive(true);
+                ButtonResume.SetActive(true);
             break;
 
             case GameTileTypes.TraderTile :
-                name.text = nameString;
-                tileName.text ="- Trader -";
+                settlementName.text = nameString;
+                gameTileName.text ="- Trader -";
                 ButtonTradeWeapon.SetActive(true);
                 ButtonRansack.SetActive(true);
+                ButtonResume.SetActive(true);
             break;
 
             case GameTileTypes.StartVillageTile :
-                name.text = nameString;
-                tileName.text ="- Home Village -";
+                settlementName.text = nameString;
+                gameTileName.text ="- Home Village -";
                 ButtonRetire.SetActive(true);
                 ButtonResume.SetActive(true);
             break;

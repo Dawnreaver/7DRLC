@@ -16,6 +16,9 @@ public class InterfaceBehaviour : MonoBehaviour
     public GameObject inGameMenu;
     public GameObject traderScreen;
     public GameObject endGameScreen;
+    public Text EndGameScreenText;
+    public GameObject winRune;
+    public GameObject lostRune;
     public GameObject sagaScreen;
 
     public GameObject playerInventory;
@@ -153,6 +156,10 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         Debug.Log("Quitting to main menu, resetting game");
         gameLogic.gameStarted = false;
+        DisableEndGameScreen();
+        DiableSagaScreen();
+        Application.LoadLevel(0);
+        
     }
 
     IEnumerator RunLoadingScreenanimation()
@@ -213,5 +220,35 @@ public class InterfaceBehaviour : MonoBehaviour
            m_triviaIndex = hintsAndTrivia.Count-1;  
         }
         hintsAndTriviaText.text = "Did you know: \n"+hintsAndTrivia[m_triviaIndex];
+    }
+    public void EnableEndGameScreenWin()
+    {
+        endGameScreen.SetActive(true);
+        winRune.SetActive(true);
+        lostRune.SetActive(false);
+        EndGameScreenText.text = "You Found Vinland!";
+        
+    }
+    public void EnableEndGameScreenLose()
+    {
+        endGameScreen.SetActive(true);
+        winRune.SetActive(false);
+        lostRune.SetActive(true);
+        EndGameScreenText.text = "Your Journey Failed";
+    }
+
+    public void DisableEndGameScreen()
+    {
+        endGameScreen.SetActive(false);
+    }
+
+    public void EnableSagaScreen()
+    {
+        sagaScreen.SetActive(true);
+        DisableEndGameScreen();
+    }
+    public void DiableSagaScreen()
+    {
+        sagaScreen.SetActive(false);
     }
 }

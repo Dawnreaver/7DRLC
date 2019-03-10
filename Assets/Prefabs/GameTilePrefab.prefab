@@ -177,17 +177,18 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 82f8820813636eb47adb63f423504cde, type: 2}
   - {fileID: 2100000, guid: f9d859acfb5e1ab43ae5d6912fb1f176, type: 2}
   - {fileID: 2100000, guid: 08d56fdb2f028df408c53b09c05d969d, type: 2}
-  - {fileID: 2100000, guid: 6d75d1b3d55244347b73f0586583612c, type: 2}
+  - {fileID: 2100000, guid: 3a64d051c21b8044ca7f397d511b20e1, type: 2}
   - {fileID: 2100000, guid: 54d6ee90c9c5fc64ca2746a1351b7aae, type: 2}
   - {fileID: 2100000, guid: ccade222d10b60943aa4c9eac2fad6bb, type: 2}
   - {fileID: 2100000, guid: 873eab2454f8db14a95ae2bf3467c357, type: 2}
+  - {fileID: 2100000, guid: 6d77c8ce5f59f944caed1488c9c0a13a, type: 2}
   gameTileMeshes:
   - {fileID: 4300000, guid: fb88e7003bee47a4c94e312a97be5db8, type: 3}
   - {fileID: 4300000, guid: 14d1c2b5c6a9aa046ab0d4de67abe949, type: 3}
   - {fileID: 4300000, guid: 5922826473ebc4942a2039f1f8b54421, type: 3}
   - {fileID: 4300000, guid: 0af6e908d84ad404c9e6e5cce5d1a1de, type: 3}
-  - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
-  - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
+  - {fileID: 4300000, guid: 7fe65aae1760f1448afe79905e6ef32c, type: 3}
+  - {fileID: 4300000, guid: 2ce709ca329989d4ebe87a4e2e4baacb, type: 3}
   - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
   - {fileID: 4300000, guid: 589587d10bb42f4408b988c39b52f9f5, type: 3}
   - {fileID: 4300000, guid: bed4a30c1201fef4292ea4aad9be0c35, type: 3}
@@ -202,7 +203,7 @@ MonoBehaviour:
   - {fileID: 4300000, guid: d585d78e76c51b544962f1d4ac030c23, type: 3}
   - {fileID: 4300002, guid: caced92c884036643bfe79ff97d7a560, type: 3}
   actionIndicator: {fileID: 1217605460}
-  name: 
+  tileName: 
 --- !u!65 &7825716446328258118
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -11,8 +11,34 @@ public class PlayerBehaviour : MonoBehaviour
     public PlayerGenders playerGender;
     private List<string> m_maleNames = new List<string>()
     {
-        "Bjørn","Brynjar","Dag","Einar","Erik","Gunnar","Helgi","Hlynur","Ingmar","Ivar","Kjartan","Knut","Leif","Njal","Olaf",
-        "Örn","Ragnar","Randi","Sigur","Sindri","Svend","Tor"
+        /*"Bjørn","Brynjar","Dag","Einar","Erik","Gunnar","Helgi","Hlynur","Ingmar","Ivar","Kjartan","Knut","Leif","Njal","Olaf",
+        "Örn","Ragnar","Randi","Sigur","Sindri","Svend","Tor"*/
+        "Arne",
+        "Birger",
+        "Bjørn",
+        "Bo",
+        "Erik",
+        "Frode",
+        "Gorm",
+        "Halfdan",
+        "Harald", 
+        "Knud",
+        "Kåre",
+        "Leif",
+        "Njal",
+        "Roar",
+        "Rune",
+        "Sten",
+        "Skarde",
+        "Sune",
+        "Svend",
+        "Troels",
+        "Toke",
+        "Torsten",
+        "Trygve",
+        "Ulf",
+        "Ødger",
+        "Åge"
     };
     private List<string> m_maleAttributes = new List<string>()
     {
@@ -21,8 +47,33 @@ public class PlayerBehaviour : MonoBehaviour
     };
     private List<string> m_femaleNames = new List<string>()
     {
-        "Aðalheiður","Astrid","Björg","Elin","Esther","Freya","Frigg","Gildur","Guðrún","Gunhild","Hjördís","Ingrid","Minna","Mista",
-        "Ragnhildur","Saga","Salla","Sigrid","Siv","Solveig","Thelma","Tuulia","Vigdís"
+        /*"Aðalheiður","Astrid","Björg","Elin","Esther","Freya","Frigg","Gildur","Guðrún","Gunhild","Hjördís","Ingrid","Minna","Mista",
+        "Ragnhildur","Saga","Salla","Sigrid","Siv","Solveig","Thelma","Tuulia","Vigdís"*/
+
+        "Astrid",
+        "Bodil",
+        "Frida",
+        "Gertrud",
+        "Gro",
+        "Estrid",
+        "Hilda",
+        "Gudrun",
+        "Gunhild",
+        "Helga",
+        "Inga",
+        "Liv",
+        "Rndi",
+        "Signe",
+        "Sigrid",
+        "Revna",
+        "Sif",
+        "Tora",
+        "Tove",
+        "Thyra",
+        "Thurid",
+        "Yrsa",
+        "Ulfhild",
+        "Åse"
     };
     private List<string> m_femaleAttributes = new List<string>()
     {
@@ -93,6 +144,7 @@ public class PlayerBehaviour : MonoBehaviour
                     if(obj.tileType == GameTileTypes.IslandTile)
                     {
                         PlayerConsumeFood(2);
+                        gameLogic.GenerateCrossIslands();
                     }
                     else
                     {
@@ -100,6 +152,8 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
                     transform.position = newPosition;
+                    CheckForAttackOnGameTile();
+                    CheckIfReachedVinland();
                 }
             }
             if(Input.GetKeyDown("s")|| Input.GetKeyDown("down"))
@@ -113,6 +167,7 @@ public class PlayerBehaviour : MonoBehaviour
                     if(obj.tileType == GameTileTypes.IslandTile)
                     {
                         PlayerConsumeFood(2);
+                        gameLogic.GenerateCrossIslands();
                     }
                     else
                     {
@@ -120,6 +175,8 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
                     transform.position = newPosition;
+                    CheckForAttackOnGameTile();
+                    CheckIfReachedVinland();
                 }
             }
             if(Input.GetKeyDown("a")|| Input.GetKeyDown("left"))
@@ -133,6 +190,7 @@ public class PlayerBehaviour : MonoBehaviour
                     if(obj.tileType == GameTileTypes.IslandTile)
                     {
                         PlayerConsumeFood(2);
+                        gameLogic.GenerateCrossIslands();
                     }
                     else
                     {
@@ -140,6 +198,8 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
                     transform.position = newPosition;
+                    CheckForAttackOnGameTile();
+                    CheckIfReachedVinland();
                 }
             }
             if(Input.GetKeyDown("d")|| Input.GetKeyDown("right"))
@@ -153,6 +213,7 @@ public class PlayerBehaviour : MonoBehaviour
                     if(obj.tileType == GameTileTypes.IslandTile)
                     {
                         PlayerConsumeFood(2);
+                        gameLogic.GenerateCrossIslands();
                     }
                     else
                     {
@@ -160,6 +221,8 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
                     transform.position = newPosition;
+                    CheckForAttackOnGameTile();
+                    CheckIfReachedVinland();
                 }
             }
         }
@@ -175,15 +238,39 @@ public class PlayerBehaviour : MonoBehaviour
             if(lastLookedAtObject == null)
             {
                 lastLookedAtObject = hit.collider.gameObject;
+
+                // uneventful journey count? 
+
+                if(obj.tileType == GameTileTypes.WaterTile)
+                {
+                    gameLogic.uneventfulJourneyCount +=1;
+                }
+                else
+                {
+                    gameLogic.uneventfulJourneyCount = 0;
+                }
             }
             else if(hit.collider.gameObject != lastLookedAtObject)
             {
                 lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
                 lastLookedAtObject = hit.collider.gameObject;
+
+                if(obj.tileType == GameTileTypes.WaterTile)
+                {
+                    gameLogic.uneventfulJourneyCount +=1;
+                     if(gameLogic.uneventfulJourneyCount >= 5)
+                    {
+                        gameLogic.GenerateUneventfulJourney();
+                    }
+                }
+                else
+                {
+                    gameLogic.uneventfulJourneyCount = 0;
+                }
             }
             // impassable tiles: Start Village, village(has to be raised and turned into an island), trader, secret, vinland
             if(obj.tileType == GameTileTypes.StartVillageTile || obj.tileType == GameTileTypes.VillageTile
-            ||obj.tileType == GameTileTypes.VinlandTile || obj.tileType == GameTileTypes.SecretTile || obj.tileType == GameTileTypes.TraderTile)
+             || obj.tileType == GameTileTypes.TraderTile) //|| obj.tileType == GameTileTypes.SecretTile ||obj.tileType == GameTileTypes.VinlandTile 
             {
                 pathisBlocked = true;
             }
@@ -192,7 +279,7 @@ public class PlayerBehaviour : MonoBehaviour
                 pathisBlocked = false;
             }
 
-            if(obj.tileType != GameTileTypes.WaterTile)
+            if(obj.tileType != GameTileTypes.WaterTile || obj.tileType != GameTileTypes.PirateTile || obj.tileType != GameTileTypes.SerpentTile)
             {
                 if(transform.localRotation.y == 0.0f)
                 {
@@ -209,12 +296,44 @@ public class PlayerBehaviour : MonoBehaviour
                 else
                 {
                     obj.EnableActionIndicator(Vector3.left);
-                }
-
-                
+                } 
             }
         }
     }
+
+    public void CheckForAttackOnGameTile()
+    {
+        for(int a = 0; a < gameLogic.usedGameTiles.Count; a++)
+        {
+            GameTileBehaviour tile = gameLogic.usedGameTiles[a].GetComponent<GameTileBehaviour>();
+
+            if(gameLogic.usedGameTiles[a].transform.position.x == transform.position.x && gameLogic.usedGameTiles[a].transform.position.z == transform.position.z)
+            {
+                if(tile.tileType == GameTileTypes.SerpentTile || tile.tileType == GameTileTypes.PirateTile)
+                {
+                    Debug.Log("Attacking: "+tile.tileType.ToString());
+                    gameLogic.AttackGameTile(gameLogic.usedGameTiles[a]);
+                }
+            }
+        }
+    }
+
+    public void CheckIfReachedVinland()
+    {
+        for(int b = 0; b < gameLogic.usedGameTiles.Count; b++)
+        {
+            GameTileBehaviour tile = gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>();
+
+            if(gameLogic.usedGameTiles[b].transform.position.x == transform.position.x && gameLogic.usedGameTiles[b].transform.position.z == transform.position.z)
+            {
+                if(tile.tileType == GameTileTypes.VinlandTile)
+                {
+                    gameLogic.WinGame();
+                }
+            }
+        }
+    }
+
 
     public void InitialisePlayer()
     {
@@ -242,6 +361,8 @@ public class PlayerBehaviour : MonoBehaviour
             if(crew <= 0)
             {
                 crew = 0;
+
+                gameLogic.GenerateEndGameStarvation();
                 Debug.Log("Lost Game: Starvation");
             }
         }
