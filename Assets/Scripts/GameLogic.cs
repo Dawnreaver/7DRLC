@@ -104,7 +104,7 @@ public class GameLogic : MonoBehaviour
     // Saga generation
     public SaveSaga sagaLogic;
 
-    Dictionary<Vector2, GameTileTypes> gameTilesDictionary = new Dictionary<Vector2, GameTileTypes>();
+    Dictionary<Vector2, string> gameTilesDictionary = new Dictionary<Vector2, string>();
     // Start is called before the first frame update
     void Start()
     {
@@ -182,7 +182,8 @@ public class GameLogic : MonoBehaviour
                 {
                     //Debug.Log("Corner: "+x+","+z);
                 }
-                else{
+                else
+                {
                     tile = gameTilesPool[gameTilesPool.Count-1];
                     tile.transform.position = new Vector3(x,gameTileStartPositionHeight,z);
                     GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
@@ -199,7 +200,7 @@ public class GameLogic : MonoBehaviour
                     }*/
                     else
                     {
-                        tile.name = "GameTile";
+                        tile.name = "WaterTile";
                         gameTile.SetTileType(GameTileTypes.WaterTile);
                     }
                     tile.SetActive(true);
@@ -207,49 +208,49 @@ public class GameLogic : MonoBehaviour
 
                     gameTilesPool.Remove(tile);
                     // add tiles to the directory, with their tile type
-                    gameTilesDictionary.Add(new Vector2(tile.transform.position.x,tile.transform.position.z),tile.GetComponent<GameTileBehaviour>().tileType);
+                    gameTilesDictionary.Add(new Vector2(tile.transform.position.x,tile.transform.position.z),gameTile.SerialiseGameTile());
                 }
             }
         }
     }
     void SpawnPlayer()
+    {
+        playerObject = Instantiate(playerObjectPrefab,transform.position, Quaternion.identity) as GameObject;
+        playerObject.name = "PlayerObject";
+        PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
+
+        int randomPlayerPosition = Random.Range(0,4);
+
+        if(randomPlayerPosition == 0)
         {
-            playerObject = Instantiate(playerObjectPrefab,transform.position, Quaternion.identity) as GameObject;
-            playerObject.name = "PlayerObject";
-            PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
-
-            int randomPlayerPosition = Random.Range(0,4);
-
-            if(randomPlayerPosition == 0)
-            {
-                playerObject.transform.position = new Vector3(gameTileStartPosition.x,0.0f,gameTileStartPosition.z+1);
-                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
-            }
-            else if(randomPlayerPosition == 1)
-            {
-                playerObject.transform.position = new Vector3(gameTileStartPosition.x+1,0.0f,gameTileStartPosition.z);
-                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
-            }
-            else if(randomPlayerPosition == 2)
-            {
-                playerObject.transform.position = new Vector3(gameTileStartPosition.x,0.0f,gameTileStartPosition.z-1);
-                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
-            }
-            else
-            {
-                playerObject.transform.position = new Vector3(gameTileStartPosition.x-1,0.0f,gameTileStartPosition.z);
-                playerObject.transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
-            }
-            
-            mainCamera.followObject = playerObject;
-            mainCamera.SetStartPosition();
-            obj.gameLogic = this;
-            obj.startFood = playerStartFood;
-            obj.startLoot = playerStartLoot;
-            // perform any actions to randomise the playe
-            obj.InitialisePlayer();
-            // actions defined in player script? 
+            playerObject.transform.position = new Vector3(gameTileStartPosition.x,0.0f,gameTileStartPosition.z+1);
+            playerObject.transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
         }
+        else if(randomPlayerPosition == 1)
+        {
+            playerObject.transform.position = new Vector3(gameTileStartPosition.x+1,0.0f,gameTileStartPosition.z);
+            playerObject.transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+        }
+        else if(randomPlayerPosition == 2)
+        {
+            playerObject.transform.position = new Vector3(gameTileStartPosition.x,0.0f,gameTileStartPosition.z-1);
+            playerObject.transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+        }
+        else
+        {
+            playerObject.transform.position = new Vector3(gameTileStartPosition.x-1,0.0f,gameTileStartPosition.z);
+            playerObject.transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
+        }
+        
+        mainCamera.followObject = playerObject;
+        mainCamera.SetStartPosition();
+        obj.gameLogic = this;
+        obj.startFood = playerStartFood;
+        obj.startLoot = playerStartLoot;
+        // perform any actions to randomise the playe
+        obj.InitialisePlayer();
+        // actions defined in player script? 
+    }
     void SpawnAndDespawnBoardTiles()
     { 
         /*
@@ -284,9 +285,11 @@ public class GameLogic : MonoBehaviour
             for( int b = 0; b < potentialSpawnPositions.Count; b++)
             {
                 GameTileTypes type;
+                string tileInfromation;
                 GameObject tile;
+                Vector2 newTilePosition = new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z);
 
-                if(!gameTilesDictionary.TryGetValue(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z), out type))
+                if(!gameTilesDictionary.TryGetValue(newTilePosition, out tileInfromation))
                 {
                     //Debug.Log("Have to creaye new tile...");
                     if(gameTilesPool.Count >= 1)
@@ -294,17 +297,20 @@ public class GameLogic : MonoBehaviour
                         tile = gameTilesPool[gameTilesPool.Count-1];
                         tile.transform.position = potentialSpawnPositions[b];
                         GameTileTypes tileType = ChooseRandomGameTile();
-                        tile.GetComponent<GameTileBehaviour>().SetTileType(tileType);
+                        Debug.Log(tileType);
+                        GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
+                        gameTile.name = ReturnRandomString(m_villageTraderNames);
                         if(tileType == GameTileTypes.SerpentTile || tileType == GameTileTypes.PirateTile)
                         {
                             TurnGameTileRandomly(tile);
                         }
-                        else if(tileType == GameTileTypes.VillageTile || tileType == GameTileTypes.TraderTile)
-                        {
-                            
-                        }
+                        gameTile.SetTileType(tileType);
+
+                        // reset ransacked status for a newly spawned tile
+                        gameTile.isRansacked = 0;
                         tile.SetActive(true);
-                        gameTilesDictionary.Add(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z),tileType);
+                        Debug.Log(gameTile.SerialiseGameTile());
+                        gameTilesDictionary.Add(newTilePosition,gameTile.SerialiseGameTile());
                         gameTilesPool.Remove(tile);
                         usedGameTiles.Add(tile);
                         numberOfNewSpawnedTiles += 1;
@@ -314,14 +320,16 @@ public class GameLogic : MonoBehaviour
                         Debug.Log("Out of game tiles...");
                     }
                 }
-                else if(gameTilesDictionary.TryGetValue(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z), out type) && !IsTileInUse(potentialSpawnPositions[b]) && !IsTileNotAStartTile(potentialSpawnPositions[b]))
+                else if(gameTilesDictionary.TryGetValue(newTilePosition, out tileInfromation) && !IsTileInUse(potentialSpawnPositions[b]) && !IsTileNotAStartTile(potentialSpawnPositions[b]))
                 {
                     //Debug.Log("Tile is part of the dictionary, but needs to be re-spawned");
                     if(gameTilesPool.Count >= 1)
                    {
                         tile = gameTilesPool[gameTilesPool.Count-1];
                         tile.transform.position = potentialSpawnPositions[b];
-                        tile.GetComponent<GameTileBehaviour>().SetTileType(type);
+                        GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
+                        gameTile.DeserialiseGameTile(tileInfromation);
+                        type = gameTile.tileType;
                         if(type == GameTileTypes.SerpentTile || type == GameTileTypes.PirateTile)
                         {
                             TurnGameTileRandomly(tile);
@@ -583,13 +591,13 @@ public class GameLogic : MonoBehaviour
                 m_villageTraderNames.Add(name);
             }
 
-            randomString = strings[Random.Range(0,strings.Length)];
+            randomString = strings[Random.Range(0,strings.Count)];
             strings.Remove(randomString);
             usedStrings.Add(randomString);
         }
         else
         {
-            randomString = strings[Random.Range(0,strings.Length)];
+            randomString = strings[Random.Range(0,strings.Count)];
             strings.Remove(randomString);
             usedStrings.Add(randomString);
         }
@@ -690,7 +698,7 @@ public class GameLogic : MonoBehaviour
     {
         gameTilesDictionary.Remove(tileToPurge.ReturnPosition());
         tileToPurge.SetTileType (type);
-        gameTilesDictionary.Add(tileToPurge.ReturnPosition(),type);
+        gameTilesDictionary.Add(tileToPurge.ReturnPosition(),tileToPurge.SerialiseGameTile());
     }
 
     public void RansackGameTile()
@@ -734,7 +742,9 @@ public class GameLogic : MonoBehaviour
             Debug.Log("Raided a trader...");
             GenerateRaidedTrader();
 
-            // play effect
+            tile.isRansacked = 1;
+            tile.name = "Ransacked Trader";
+            PurgeGameTile(tile, GameTileTypes.TraderTile);
         }
         else if(tile.tileType == GameTileTypes.VillageTile)
         {
@@ -743,10 +753,10 @@ public class GameLogic : MonoBehaviour
             Debug.Log("Raided a village...");
             GenerateRaidedVillage();
 
-            // play effect
+            tile.isRansacked = 1;
+            tile.name = "Ransacked Village";
+            PurgeGameTile(tile, GameTileTypes.VillageTile);
         }
-        // turn ransacked game tile into an island
-        PurgeGameTile(tile, GameTileTypes.IslandTile);
     }
 
     public void TradeFood()
@@ -959,18 +969,9 @@ public class GameLogic : MonoBehaviour
 
         m_findingVinlandStrings = new List<string>()
         {
-        "After a long journey "+obj.playerName+ " and "+ obj.personalPronoun +" warriors layed eyed on the place of myth and legend: "+obj.vinland+"! Long will the skald tell the tale of "+obj.playerName+" and "+ obj.personalPronoun +obj.shipName+ " and the men and woman that journey to the end of the know world."
+        "After a long journey "+obj.playerName+ " and "+ obj.personalPronoun +" warriors layed eyed on the place of myth and legend: "+obj.vinland+"! Long will the skalds tell the tale of "+obj.playerName+" and "+ obj.personalPronoun +obj.shipName+ " and the men and woman that journey to the end of the know world."
         };
 
         sagaLogic.AddSagaContent(ReturnRandomString(m_findingVinlandStrings));
-    }   
-    void Recyclestrings()
-    {
-        while(m_usedVillageTraderNames.Count > 0)
-        {
-            string name = m_usedVillageTraderNames[m_usedVillageTraderNames.Count-1];
-            m_usedVillageTraderNames.Remove(name);
-            m_villageTraderNames.Add(name);
-        }
     }
 }

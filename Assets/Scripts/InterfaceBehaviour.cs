@@ -79,7 +79,7 @@ public class InterfaceBehaviour : MonoBehaviour
                 {
                     GameTileBehaviour obj = gameLogic.playerObject.GetComponent<PlayerBehaviour>().lastLookedAtObject.GetComponent<GameTileBehaviour>();
 
-                    if( obj.tileType == GameTileTypes.TraderTile || obj.tileType == GameTileTypes.VillageTile || obj.tileType == GameTileTypes.StartVillageTile)
+                    if( obj.tileType == GameTileTypes.TraderTile && obj.isRansacked == 0 || obj.tileType == GameTileTypes.VillageTile && obj.isRansacked == 0 || obj.tileType == GameTileTypes.StartVillageTile && obj.isRansacked == 0)
                     {
                         EnableActionScreen();
                         actionScreen.GetComponent<ActionScreenBehaviour>().AdjustActionDialogue(obj.tileType, obj.name);

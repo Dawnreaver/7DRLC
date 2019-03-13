@@ -21,14 +21,14 @@ public class GameTileBehaviour : MonoBehaviour
     private float m_actionIndicatorRotationSpeed = 60.0f;
     void OnEnable()
     {
-        if(isStartAreaTile)
+        /* if(isStartAreaTile)
         {
             gameObject.name = "StartTile "+transform.position.x+"/"+transform.position.z;
         }
         else
         {
             gameObject.name = "GameTile "+transform.position.x+"/"+transform.position.z;
-        }
+        }*/
 
         DisableActionIndicator();
     }
@@ -189,11 +189,25 @@ public class GameTileBehaviour : MonoBehaviour
             break;
 
             case GameTileTypes.VillageTile :
-                actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[3];
+                if(isRansacked == 0)
+                {
+                    actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[3];
+                }
+                else
+                {
+                    actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[2];
+                }
             break;
 
             case GameTileTypes.TraderTile :
-                actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[3];
+                 if(isRansacked == 0)
+                {
+                    actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[3];
+                }
+                else
+                {
+                    actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[2];
+                }
             break;
 
             case GameTileTypes.PirateTile :
@@ -220,7 +234,7 @@ public class GameTileBehaviour : MonoBehaviour
     public void EnableActionIndicator(Vector3 playerLookDiretion)
     {
         actionIndicator.SetActive(true);
-        if(tileType == GameTileTypes.IslandTile )
+        if(tileType == GameTileTypes.IslandTile && isRansacked == 0 || tileType == GameTileTypes.VillageTile && isRansacked == 1 || tileType == GameTileTypes.TraderTile && isRansacked == 1)
         {
             actionIndicator.transform.rotation = Quaternion.LookRotation(playerLookDiretion,Vector3.up);
         }
@@ -253,30 +267,22 @@ public class GameTileBehaviour : MonoBehaviour
     {
         string[] information = informationToLoad.Split(',');
 
-        // game tile information to load
+        tileType = (GameTileTypes) System.Enum.Parse( typeof(GameTileTypes), information[0] );
+        Debug.Log(tileType);
 
-        // GameTileType 
+        tileName = information[1];
 
-        // Tile name ( name of the island / village)
-
-        // ransacked yes / no
-
-        // run SetTileType();
+        int.TryParse(information[2], out isRansacked);
+        
+        SetTileType(tileType);
     }
 
     public string SerialiseGameTile()
     {
         string infoToSerialise ="";
 
-        // Add game tile information 
-
-        infoToSerialise = ""+ tileType.ToString()+","+
-        tileName+","+isRansacked;
-
-        // Tile name ( name of the island / village)
-
-        // ransacked yes / no
-
+        infoToSerialise = ""+ tileType.ToString()+","+tileName+","+isRansacked;
+        //Debug.Log(infoToSerialise);
         return infoToSerialise;
     }
 }

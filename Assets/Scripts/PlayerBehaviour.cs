@@ -165,7 +165,7 @@ public class PlayerBehaviour : MonoBehaviour
                 }
                 else if (transform.localRotation.y == 1.0f && !pathisBlocked)
                 {
-                    if(obj.tileType == GameTileTypes.IslandTile)
+                    if(obj.tileType == GameTileTypes.IslandTile && obj.isRansacked == 0|| obj.tileType == GameTileTypes.VillageTile && obj.isRansacked == 1 || obj.tileType == GameTileTypes.TraderTile && obj.isRansacked == 1)
                     {
                         PlayerConsumeFood(2);
                         gameLogic.GenerateCrossIslands();
@@ -249,8 +249,8 @@ public class PlayerBehaviour : MonoBehaviour
                 lastLookedAtObject = hit.collider.gameObject;
             }
             // impassable tiles: Start Village, village(has to be raised and turned into an island), trader, secret, vinland
-            if(obj.tileType == GameTileTypes.StartVillageTile || obj.tileType == GameTileTypes.VillageTile
-             || obj.tileType == GameTileTypes.TraderTile) //|| obj.tileType == GameTileTypes.SecretTile ||obj.tileType == GameTileTypes.VinlandTile 
+            if(obj.tileType == GameTileTypes.StartVillageTile && obj.isRansacked == 0|| obj.tileType == GameTileTypes.VillageTile  && obj.isRansacked == 0
+             || obj.tileType == GameTileTypes.TraderTile  && obj.isRansacked == 0) //|| obj.tileType == GameTileTypes.SecretTile ||obj.tileType == GameTileTypes.VinlandTile 
             {
                 pathisBlocked = true;
             }
