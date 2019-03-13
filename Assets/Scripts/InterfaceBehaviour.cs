@@ -17,8 +17,8 @@ public class InterfaceBehaviour : MonoBehaviour
     public GameObject traderScreen;
     public GameObject endGameScreen;
     public Text EndGameScreenText;
-    public GameObject winRune;
-    public GameObject lostRune;
+    public GameObject endScreenRune;
+    public Sprite[] endScreenRunes = new Sprite[3];
     public GameObject sagaScreen;
 
     public GameObject playerInventory;
@@ -224,17 +224,22 @@ public class InterfaceBehaviour : MonoBehaviour
     public void EnableEndGameScreenWin()
     {
         endGameScreen.SetActive(true);
-        winRune.SetActive(true);
-        lostRune.SetActive(false);
+       endScreenRune.GetComponent<Image>().sprite = endScreenRunes[2];
         EndGameScreenText.text = "You Found Vinland!";
         
     }
     public void EnableEndGameScreenLose()
     {
         endGameScreen.SetActive(true);
-        winRune.SetActive(false);
-        lostRune.SetActive(true);
-        EndGameScreenText.text = "Your Journey Failed";
+        endScreenRune.GetComponent<Image>().sprite = endScreenRunes[0];
+        EndGameScreenText.text = "Your Journey Failed!";
+    }
+
+    public void EnableRetireEndGameScreen()
+    {
+        endGameScreen.SetActive(true);
+        endScreenRune.GetComponent<Image>().sprite = endScreenRunes[1];
+        EndGameScreenText.text = "You abborted your journey.";
     }
 
     public void DisableEndGameScreen()

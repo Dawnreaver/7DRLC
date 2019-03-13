@@ -192,6 +192,9 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 2fe395b6cd3f89e429466b1a16a11da8, type: 3}
   - {fileID: 4300000, guid: 589587d10bb42f4408b988c39b52f9f5, type: 3}
   - {fileID: 4300000, guid: bed4a30c1201fef4292ea4aad9be0c35, type: 3}
+  ransackedGameTileMeshes:
+  - {fileID: 4300000, guid: bccb61dcd185afc4db99897c618c0773, type: 3}
+  - {fileID: 4300000, guid: d76bd407e9e75284fb4f3e0855c85868, type: 3}
   gameTileObject: {fileID: 2267258905528978517}
   tileType: 0
   isStartAreaTile: 0
@@ -204,6 +207,7 @@ MonoBehaviour:
   - {fileID: 4300002, guid: caced92c884036643bfe79ff97d7a560, type: 3}
   actionIndicator: {fileID: 1217605460}
   tileName: 
+  isRansacked: 0
 --- !u!65 &7825716446328258118
 BoxCollider:
   m_ObjectHideFlags: 0

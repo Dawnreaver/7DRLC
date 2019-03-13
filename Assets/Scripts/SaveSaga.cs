@@ -150,9 +150,10 @@ public class SaveSaga : MonoBehaviour
         var bytes = tex.EncodeToPNG();
         Destroy(tex);
 
-        string fileName = "/Saga of "+gameLogic.playerObject.GetComponent<PlayerBehaviour>().playerName+" - "+Time.timeSinceLevelLoad;
+        string fileName = "%userprofile%/desktop/Saga of "+gameLogic.playerObject.GetComponent<PlayerBehaviour>().playerName+" "+Time.timeSinceLevelLoad;
+        Debug.Log(Application.dataPath + fileName+".png");
         //Writing bytes to a file
-        File.WriteAllBytes(Application.dataPath + fileName+".png", bytes);
+        File.WriteAllBytes(fileName+".png", bytes);
 
         //In case of ScaleMode was not ScaleWithScreenSize, parent will not be assigned then no need to revert the changes
         if (rectTransformParent != null)

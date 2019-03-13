@@ -95,6 +95,7 @@ public class ActionScreenBehaviour : MonoBehaviour
     {
         gameInterface.DisableActionScreen();
         gameLogic.RetireFromAdventure();
+        gameLogic.LoseGame();
     }
     public void ResumeAdventure()
     {

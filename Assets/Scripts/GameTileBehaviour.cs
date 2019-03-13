@@ -8,6 +8,7 @@ public class GameTileBehaviour : MonoBehaviour
 {
     public List<Material> gameTileMaterials = new List<Material>();
     public List<Mesh> gameTileMeshes = new List<Mesh>();
+    public List<Mesh> ransackedGameTileMeshes = new List<Mesh>();
     public GameObject gameTileObject;
     public GameTileTypes tileType;
     public bool isStartAreaTile = false;
@@ -15,6 +16,7 @@ public class GameTileBehaviour : MonoBehaviour
     public GameObject actionIndicator;
 
     public string tileName;
+    public int isRansacked = 0;
 
     private float m_actionIndicatorRotationSpeed = 60.0f;
     void OnEnable()
@@ -125,7 +127,14 @@ public class GameTileBehaviour : MonoBehaviour
             break; */
 
             case GameTileTypes.VillageTile :
-                obj.mesh = gameTileMeshes[1];
+                if( isRansacked == 0 )
+                {
+                    obj.mesh = gameTileMeshes[1];
+                }
+                else
+                {
+                     obj.mesh = ransackedGameTileMeshes[0];
+                }
             break;
 
             case GameTileTypes.IslandTile :
@@ -133,7 +142,14 @@ public class GameTileBehaviour : MonoBehaviour
             break;
 
             case GameTileTypes.TraderTile :
-                obj.mesh = gameTileMeshes[3];
+                if( isRansacked == 0 )
+                {
+                    obj.mesh = gameTileMeshes[3];
+                }
+                else
+                {
+                     obj.mesh = ransackedGameTileMeshes[1];
+                }
             break;
 
             case GameTileTypes.PirateTile :
@@ -231,5 +247,36 @@ public class GameTileBehaviour : MonoBehaviour
         myPosition = new Vector2(transform.position.x, transform.position.z);
 
         return myPosition;
+    }
+
+     public void DeserialiseGameTile(string informationToLoad)
+    {
+        string[] information = informationToLoad.Split(',');
+
+        // game tile information to load
+
+        // GameTileType 
+
+        // Tile name ( name of the island / village)
+
+        // ransacked yes / no
+
+        // run SetTileType();
+    }
+
+    public string SerialiseGameTile()
+    {
+        string infoToSerialise ="";
+
+        // Add game tile information 
+
+        infoToSerialise = ""+ tileType.ToString()+","+
+        tileName+","+isRansacked;
+
+        // Tile name ( name of the island / village)
+
+        // ransacked yes / no
+
+        return infoToSerialise;
     }
 }

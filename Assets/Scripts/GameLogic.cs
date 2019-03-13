@@ -512,7 +512,7 @@ public class GameLogic : MonoBehaviour
             }
     }
 
-     public string ReturnRandomString(List<string> strings, string unique = null)
+     public string ReturnRandomString(List<string> strings, string unique = "")
     {
         string randomString;
 
@@ -566,6 +566,9 @@ public class GameLogic : MonoBehaviour
     public void RetireFromAdventure()
     {
         GenerateEndGameEarly();
+        sagaLogic.AddSagaEnd();
+        menuEnabled = true;
+        gameInterface.EnableRetireEndGameScreen();
         
     }
 
@@ -576,6 +579,7 @@ public class GameLogic : MonoBehaviour
         menuEnabled = true;
         gameInterface.EnableEndGameScreenWin();
     }
+
     public void LoseGame()
     {
         sagaLogic.AddSagaEnd();
@@ -745,7 +749,7 @@ public class GameLogic : MonoBehaviour
 
         m_endGameEarlyStrings = new List<string>(){
         "And so "+obj.playerName+ " returned with a cerw of "+ obj.crew + " without having set sight on " + obj.vinland+".",
-        "Finishing their journey early "+obj.playerName+ " and " + obj.personalPronoun + " crew could only hope to find "+ obj.vinland + " on their next voyage",
+        "Finishing their journey early "+obj.playerName+ " and " + obj.personalPronoun + " crew could only hope to find "+ obj.vinland + " on their next voyage.",
         ""+obj.playerName+ " received an urgent message from "+ obj.father+ " and "+obj.mother+". The search for " + obj.vinland + " would have to wait for another time."
         };
 
@@ -761,7 +765,7 @@ public class GameLogic : MonoBehaviour
         m_endGameStarvationStrings = new List<string>(){
         "A good death is it's own reward, but "+obj.playerName+ " and "+ obj.personalPronoun +" crew would never know. Without food they perished one after the other until even "+obj.playerName+" had to submit to <color=red> Hel's<c/color> call.",
         ""+obj.playerName+ " and "+ obj.personalPronoun + " crew were able seaman and warriors, but even the hardiest Viking has to submit to hunger. They perished on their search for "+obj.vinland +" never to be seen again",
-        "Oh norns, that you would have forseen the death of "+obj.playerName+obj.playerAttribute+ obj.father+ " and "+obj.mother+"by such a cruel thing as hunger. May <color=red> Hel<c/color> be mericiful on their souls."
+        "Oh norns, that you would have forseen the death of "+obj.playerName+obj.playerAttribute+ obj.father+ " and "+obj.mother+" by such a cruel thing as hunger. May <color=red> Hel<c/color> be mericiful on their souls."
         };
 
         sagaLogic.AddSagaContent(ReturnRandomString(m_endGameStarvationStrings));
@@ -776,7 +780,7 @@ public class GameLogic : MonoBehaviour
         m_endGameFailedRansackStrings = new List<string>(){
         "They say when you push a man or a woman too much over the edge, they will become bigger than life itself and, with a bit of help of <color=red>Tyr</color> or <color=red>Loki</color>even a pesant or simple trader will bring down a warrior.",
         "When "+obj.playerName+ " and "+ obj.personalPronoun +" crew tried to ransack the island, they were defeat to the last men and woman, by the desperate islanders defening their homes.",
-        "Who would have thought that the norns foresaw this fate for "+obj.playerName+ "and "+ obj.personalPronoun +" crew? Everyone slay on the raid on an island. The messengers will have to cary sad new to Jarl"+ obj.father+ " and "+obj.mother+ " on this fateful day."
+        "Who would have thought that the norns foresaw this fate for "+obj.playerName+ " and "+ obj.personalPronoun +" crew? Everyone slay on the raid on an island. The messengers will have to cary sad new to Jarl"+ obj.father+ " and "+obj.mother+ " on this fateful day."
         };
 
         sagaLogic.AddSagaContent(ReturnRandomString(m_endGameFailedRansackStrings));

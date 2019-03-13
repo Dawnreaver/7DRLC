@@ -152,6 +152,7 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z+moveDistance);
                     transform.position = newPosition;
+                    CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
                 }
@@ -175,6 +176,7 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z-moveDistance);
                     transform.position = newPosition;
+                    CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
                 }
@@ -198,6 +200,7 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x-moveDistance, transform.position.y, transform.position.z);
                     transform.position = newPosition;
+                    CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
                 }
@@ -221,6 +224,7 @@ public class PlayerBehaviour : MonoBehaviour
                     }
                     Vector3 newPosition = new Vector3(transform.position.x+moveDistance, transform.position.y, transform.position.z);
                     transform.position = newPosition;
+                    CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
                 }
@@ -238,35 +242,11 @@ public class PlayerBehaviour : MonoBehaviour
             if(lastLookedAtObject == null)
             {
                 lastLookedAtObject = hit.collider.gameObject;
-
-                // uneventful journey count? 
-
-                if(obj.tileType == GameTileTypes.WaterTile)
-                {
-                    gameLogic.uneventfulJourneyCount +=1;
-                }
-                else
-                {
-                    gameLogic.uneventfulJourneyCount = 0;
-                }
             }
             else if(hit.collider.gameObject != lastLookedAtObject)
             {
                 lastLookedAtObject.GetComponent<GameTileBehaviour>().DisableActionIndicator();
                 lastLookedAtObject = hit.collider.gameObject;
-
-                if(obj.tileType == GameTileTypes.WaterTile)
-                {
-                    gameLogic.uneventfulJourneyCount +=1;
-                     if(gameLogic.uneventfulJourneyCount >= 5)
-                    {
-                        gameLogic.GenerateUneventfulJourney();
-                    }
-                }
-                else
-                {
-                    gameLogic.uneventfulJourneyCount = 0;
-                }
             }
             // impassable tiles: Start Village, village(has to be raised and turned into an island), trader, secret, vinland
             if(obj.tileType == GameTileTypes.StartVillageTile || obj.tileType == GameTileTypes.VillageTile
@@ -298,6 +278,25 @@ public class PlayerBehaviour : MonoBehaviour
                     obj.EnableActionIndicator(Vector3.left);
                 } 
             }
+        }
+    }
+
+    void CheckForUneventulJourney()
+    {
+        GameTileBehaviour obj = lastLookedAtObject.GetComponent<GameTileBehaviour>();
+
+        if(obj.tileType == GameTileTypes.WaterTile)
+        {
+            gameLogic.uneventfulJourneyCount +=1;
+                if(gameLogic.uneventfulJourneyCount >= 5)
+            {
+                gameLogic.GenerateUneventfulJourney();
+                gameLogic.uneventfulJourneyCount = 0;
+            }
+        }
+        else
+        {
+            gameLogic.uneventfulJourneyCount = 0;
         }
     }
 
@@ -389,7 +388,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         shipName = "<color=red>"+gameLogic.ReturnRandomString(m_shipNames)+"</color>";
         father = "<color=red>"+ gameLogic.ReturnRandomString(m_maleNames, playerName)+" "+gameLogic.ReturnRandomString(m_maleAttributes)+"</color>";
-        mother = "<color=red>"+ gameLogic.ReturnRandomString(m_femaleNames,playerName)+" "+gameLogic.ReturnRandomString(m_femaleAttributes)+"</color>";
+        mother = "<color=red>"+ gameLogic.ReturnRandomString(m_femaleNames, playerName)+" "+gameLogic.ReturnRandomString(m_femaleAttributes)+"</color>";
         month = gameLogic.ReturnRandomString(m_monthsOfTheVikingYear);
         vinland = "<color=red>Vinland</color>";
        
