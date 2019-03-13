@@ -47,7 +47,7 @@ public class GameLogic : MonoBehaviour
 
     public int uneventfulJourneyCount = 0;
 
-    List<string> m_villageNames = new List<string>()
+    List<string> m_villageTraderNames = new List<string>()
     {
         "Akrar",
         "Arnallsstaoir",
@@ -98,6 +98,8 @@ public class GameLogic : MonoBehaviour
         "Sauoafellslond",
         "Seljasund"
     };
+    List<string> m_usedVillageTraderNames = new List<string>();
+    int noOfVillageTraderNames = 47;
 
     // Saga generation
     public SaveSaga sagaLogic;
@@ -189,7 +191,7 @@ public class GameLogic : MonoBehaviour
                     {
                         tile.name = "Start Village";
                         gameTile.SetTileType(GameTileTypes.StartVillageTile);
-                        gameTile.name = ReturnRandomString(m_villageNames);
+                        gameTile.name = ReturnRandomString(m_villageTraderNames);
                     }
                     /* else if(x == 2+ mainVillageStartPosition.x && z == (int)mainVillageStartPosition.z)
                     {
@@ -296,6 +298,10 @@ public class GameLogic : MonoBehaviour
                         if(tileType == GameTileTypes.SerpentTile || tileType == GameTileTypes.PirateTile)
                         {
                             TurnGameTileRandomly(tile);
+                        }
+                        else if(tileType == GameTileTypes.VillageTile || tileType == GameTileTypes.TraderTile)
+                        {
+                            
                         }
                         tile.SetActive(true);
                         gameTilesDictionary.Add(new Vector2(potentialSpawnPositions[b].x,potentialSpawnPositions[b].z),tileType);
@@ -560,6 +566,32 @@ public class GameLogic : MonoBehaviour
                     return uniqueName;
                 }
             }
+        }
+        return randomString;
+    }
+
+    public string ReturnRandomString(List<string> strings, List<string> usedStrings)
+    {
+        string randomString;
+        
+        if(strings.Count  == 0)
+        {
+            while(m_usedVillageTraderNames.Count > 0)
+            {
+                string name = m_usedVillageTraderNames[m_usedVillageTraderNames.Count-1];
+                m_usedVillageTraderNames.Remove(name);
+                m_villageTraderNames.Add(name);
+            }
+
+            randomString = strings[Random.Range(0,strings.Length)];
+            strings.Remove(randomString);
+            usedStrings.Add(randomString);
+        }
+        else
+        {
+            randomString = strings[Random.Range(0,strings.Length)];
+            strings.Remove(randomString);
+            usedStrings.Add(randomString);
         }
         return randomString;
     }
@@ -931,5 +963,14 @@ public class GameLogic : MonoBehaviour
         };
 
         sagaLogic.AddSagaContent(ReturnRandomString(m_findingVinlandStrings));
+    }   
+    void Recyclestrings()
+    {
+        while(m_usedVillageTraderNames.Count > 0)
+        {
+            string name = m_usedVillageTraderNames[m_usedVillageTraderNames.Count-1];
+            m_usedVillageTraderNames.Remove(name);
+            m_villageTraderNames.Add(name);
+        }
     }
 }
