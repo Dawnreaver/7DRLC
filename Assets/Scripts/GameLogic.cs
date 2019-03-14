@@ -333,6 +333,7 @@ public class GameLogic : MonoBehaviour
                         else if(tileType == GameTileTypes.PirateTile)
                         {
                             // work on pirate spawn here
+                            //gameTile.gameTileObject.SetActive(false);
                             GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
                             pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
                             PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
@@ -452,10 +453,21 @@ public class GameLogic : MonoBehaviour
 
     void ReturnGameTileToPool(GameObject tile)
     {
+        GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
+        gameTile.DespawnPirate();
+        gameTilesDictionary.Remove(gameTile.ReturnPosition());
+        gameTilesDictionary.Add(gameTile.ReturnPosition(), gameTile.SerialiseGameTile());
         tile.transform.position = transform.position;
         tile.SetActive(false);
         usedGameTiles.Remove(tile);
         gameTilesPool.Add(tile);
+    }
+
+    public void ReturnPirateToPool(GameObject pirate)
+    {
+        pirate.transform.position = transform.position;
+        pirate.SetActive(false);
+        m_piratePool.Add(pirate);
     }
 
     bool IsTileInUse(Vector3 position)

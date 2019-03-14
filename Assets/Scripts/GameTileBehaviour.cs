@@ -6,6 +6,7 @@ public enum GameTileTypes { StartVillageTile, VinlandTile, WaterTile, IslandTile
 public enum Seasons {Summer, Winter}
 public class GameTileBehaviour : MonoBehaviour
 {
+    public GameLogic gameLogic;
     public List<Material> gameTileMaterials = new List<Material>();
     public List<Mesh> gameTileMeshes = new List<Mesh>();
     public List<Mesh> ransackedGameTileMeshes = new List<Mesh>();
@@ -14,6 +15,8 @@ public class GameTileBehaviour : MonoBehaviour
     public bool isStartAreaTile = false;
     public List<Mesh> actionIndicatorMesh = new List<Mesh>();
     public GameObject actionIndicator;
+
+    public GameObject pirateShip;
 
     public string tileName;
     public int isRansacked = 0;
@@ -153,7 +156,8 @@ public class GameTileBehaviour : MonoBehaviour
             break;
 
             case GameTileTypes.PirateTile :
-                obj.mesh = gameTileMeshes[4];
+                //obj.mesh = gameTileMeshes[4];
+                gameTileObject.SetActive(false);
             break;
 
             case GameTileTypes.SerpentTile :
@@ -284,5 +288,23 @@ public class GameTileBehaviour : MonoBehaviour
         infoToSerialise = ""+ tileType.ToString()+","+tileName+","+isRansacked;
         //Debug.Log(infoToSerialise);
         return infoToSerialise;
+    }
+
+    public void DespawnPirate()
+    {
+        if(pirateShip != null)
+        {
+            PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
+
+            if(pirate.sightedPrey)
+            {
+                // will not despawn, turn tile into tiletype watertile instead
+                tileType = GameTileTypes.WaterTile;
+            }
+            else
+            {
+                gameLogic.ReturnPirateToPool(pirateShip);
+            }
+        }
     }
 }

@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2f98293cbfcff345804c2fd72c0b347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameLogic: {fileID: 0}
   gameTileMaterials:
   - {fileID: 2100000, guid: d5cb88670fd341a4cb5e3b98feb77010, type: 2}
   - {fileID: 2100000, guid: 3f8a2473c63626a42aec7fd375249945, type: 2}
@@ -206,6 +207,7 @@ MonoBehaviour:
   - {fileID: 4300000, guid: d585d78e76c51b544962f1d4ac030c23, type: 3}
   - {fileID: 4300002, guid: caced92c884036643bfe79ff97d7a560, type: 3}
   actionIndicator: {fileID: 1217605460}
+  pirateShip: {fileID: 0}
   tileName: 
   isRansacked: 0
 --- !u!65 &7825716446328258118
