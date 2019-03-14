@@ -45,6 +45,10 @@ public class GameLogic : MonoBehaviour
     public int vinlandTileThreshold = 150;
     public bool vinlandTileHasSpawned = false;
 
+    public GameObject piratePrefab;
+    List<GameObject> m_piratePool = new List<GameObject>();
+    int m_piratePoolSize = 12;
+
     public int uneventfulJourneyCount = 0;
 
     List<string> m_villageTraderNames = new List<string>()
@@ -99,6 +103,15 @@ public class GameLogic : MonoBehaviour
         "Seljasund"
     };
     List<string> m_usedVillageTraderNames = new List<string>();
+
+    List<string> m_islandNames = new List<string>()
+    {
+        "Barren Island",
+        "Small island",
+        "Uninhabited Island",
+        "Island",
+        "Empty Island"
+    };
     int noOfVillageTraderNames = 47;
 
     // Saga generation
@@ -112,8 +125,7 @@ public class GameLogic : MonoBehaviour
         {
             gameTileStartPosition = new Vector3((int)Random.Range(-50,50), 0,(int)Random.Range(-50,50));
         }
-        PoolGameTiles();
-        PoolFogObjects();
+        PoolGameObjects();
         SpawnStartArea(gameTileStartPosition);
         SpawnPlayer();
         mainCamera.SetCameraMovementSpeed(cameraMOvementSpeed);
@@ -137,7 +149,7 @@ public class GameLogic : MonoBehaviour
 
     }
 
-    void PoolGameTiles()
+    void PoolGameObjects()
     {
         for( int a = 0; a < m_gameTilesPoolSize; a ++)
         {
@@ -147,16 +159,23 @@ public class GameLogic : MonoBehaviour
             boardTile.transform.SetParent(gameObject.transform);
             boardTile.SetActive(false);
         }
-    }
-    void PoolFogObjects()
-    {
-        for( int a = 0; a < m_fogObjectsPoolSize; a ++)
+
+        for( int b = 0; b < m_fogObjectsPoolSize; b ++)
         {
             GameObject fogObject = Instantiate(fogPrefab, Vector3.zero, Quaternion.identity) as GameObject;
             fogObject.name = "fogObject";
             fogObjectsPool.Add(fogObject);
             fogObject.transform.SetParent(gameObject.transform);
             fogObject.SetActive(false);
+        }
+
+        for( int c = 0; c < m_piratePoolSize; c ++)
+        {
+            GameObject pirate = Instantiate(piratePrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            pirate.name = "PirateShip";
+            m_piratePool.Add(pirate);
+            pirate.transform.SetParent(gameObject.transform);
+            pirate.SetActive(false);
         }
     }
 
@@ -299,10 +318,28 @@ public class GameLogic : MonoBehaviour
                         GameTileTypes tileType = ChooseRandomGameTile();
                         Debug.Log(tileType);
                         GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
-                        gameTile.name = ReturnRandomString(m_villageTraderNames);
-                        if(tileType == GameTileTypes.SerpentTile || tileType == GameTileTypes.PirateTile)
+                        if(tileType == GameTileTypes.VillageTile || tileType == GameTileTypes.TraderTile)
+                        {
+                            gameTile.name = ReturnRandomString(m_villageTraderNames);
+                        }
+                        else if ( tileType == GameTileTypes.IslandTile)
+                        {
+                            gameTile.name = ReturnRandomString(m_islandNames);
+                        }
+                        else if(tileType == GameTileTypes.SerpentTile)
                         {
                             TurnGameTileRandomly(tile);
+                        }
+                        else if(tileType == GameTileTypes.PirateTile)
+                        {
+                            // work on pirate spawn here
+                            GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
+                            pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
+                            PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
+                            pirate.sightedPrey = true;
+                            pirate.preyObject = playerObject;
+                            pirate.tileOrigin = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                            pirateShip.SetActive(true);
                         }
                         gameTile.SetTileType(tileType);
 
