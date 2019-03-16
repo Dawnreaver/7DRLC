@@ -155,6 +155,7 @@ public class GameLogic : MonoBehaviour
         {
             GameObject boardTile = Instantiate(gameTilePrefab, Vector3.zero, Quaternion.identity) as GameObject;
             boardTile.name = "boardTile";
+            boardTile.GetComponent<GameTileBehaviour>().gameLogic = this;
             gameTilesPool.Add(boardTile);
             boardTile.transform.SetParent(gameObject.transform);
             boardTile.SetActive(false);
@@ -316,7 +317,6 @@ public class GameLogic : MonoBehaviour
                         tile = gameTilesPool[gameTilesPool.Count-1];
                         tile.transform.position = potentialSpawnPositions[b];
                         GameTileTypes tileType = ChooseRandomGameTile();
-                        Debug.Log(tileType);
                         GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
                         if(tileType == GameTileTypes.VillageTile || tileType == GameTileTypes.TraderTile)
                         {
@@ -332,14 +332,16 @@ public class GameLogic : MonoBehaviour
                         }
                         else if(tileType == GameTileTypes.PirateTile)
                         {
+                            TurnGameTileRandomly(tile);
                             // work on pirate spawn here
                             //gameTile.gameTileObject.SetActive(false);
                             GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
                             pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
                             PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
-                            pirate.sightedPrey = true;
+                            //pirate.sightedPrey = true;
                             pirate.preyObject = playerObject;
                             pirate.tileOrigin = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                            gameTile.pirateShip = pirateShip;
                             pirateShip.SetActive(true);
                         }
                         gameTile.SetTileType(tileType);
@@ -347,7 +349,6 @@ public class GameLogic : MonoBehaviour
                         // reset ransacked status for a newly spawned tile
                         gameTile.isRansacked = 0;
                         tile.SetActive(true);
-                        Debug.Log(gameTile.SerialiseGameTile());
                         gameTilesDictionary.Add(newTilePosition,gameTile.SerialiseGameTile());
                         gameTilesPool.Remove(tile);
                         usedGameTiles.Add(tile);
@@ -368,9 +369,23 @@ public class GameLogic : MonoBehaviour
                         GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
                         gameTile.DeserialiseGameTile(tileInfromation);
                         type = gameTile.tileType;
-                        if(type == GameTileTypes.SerpentTile || type == GameTileTypes.PirateTile)
+                        if(type == GameTileTypes.SerpentTile )
                         {
                             TurnGameTileRandomly(tile);
+                        }
+                        else if(type == GameTileTypes.PirateTile)
+                        {
+                            TurnGameTileRandomly(tile);
+                            // work on pirate spawn here
+                            //gameTile.gameTileObject.SetActive(false);
+                            GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
+                            pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
+                            PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
+                            //pirate.sightedPrey = true;
+                            pirate.preyObject = playerObject;
+                            pirate.tileOrigin = new Vector2(tile.transform.position.x, tile.transform.position.z);
+                            gameTile.pirateShip = pirateShip;
+                            pirateShip.SetActive(true);
                         }
                         tile.SetActive(true);
                         gameTilesPool.Remove(tile);
@@ -454,7 +469,10 @@ public class GameLogic : MonoBehaviour
     void ReturnGameTileToPool(GameObject tile)
     {
         GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
-        gameTile.DespawnPirate();
+        if(gameTile.pirateShip != null)
+        {
+            gameTile.DespawnPirate();
+        }
         gameTilesDictionary.Remove(gameTile.ReturnPosition());
         gameTilesDictionary.Add(gameTile.ReturnPosition(), gameTile.SerialiseGameTile());
         tile.transform.position = transform.position;
@@ -854,9 +872,9 @@ public class GameLogic : MonoBehaviour
         PlayerBehaviour obj = playerObject.GetComponent<PlayerBehaviour>();
 
         m_endGameStarvationStrings = new List<string>(){
-        "A good death is it's own reward, but "+obj.playerName+ " and "+ obj.personalPronoun +" crew would never know. Without food they perished one after the other until even "+obj.playerName+" had to submit to <color=red> Hel's<c/color> call.",
+        "A good death is it's own reward, but "+obj.playerName+ " and "+ obj.personalPronoun +" crew would never know. Without food they perished one after the other until even "+obj.playerName+" had to submit to <color=red> Hel's</color> call.",
         ""+obj.playerName+ " and "+ obj.personalPronoun + " crew were able seaman and warriors, but even the hardiest Viking has to submit to hunger. They perished on their search for "+obj.vinland +" never to be seen again",
-        "Oh norns, that you would have forseen the death of "+obj.playerName+obj.playerAttribute+ obj.father+ " and "+obj.mother+" by such a cruel thing as hunger. May <color=red> Hel<c/color> be mericiful on their souls."
+        "Oh norns, that you would have forseen the death of "+obj.playerName+obj.playerAttribute+ obj.father+ " and "+obj.mother+" by such a cruel thing as hunger. May <color=red> Hel</color> be mericiful on their souls."
         };
 
         sagaLogic.AddSagaContent(ReturnRandomString(m_endGameStarvationStrings));

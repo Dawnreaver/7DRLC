@@ -362,6 +362,7 @@ public class PlayerBehaviour : MonoBehaviour
                 crew = 0;
 
                 gameLogic.GenerateEndGameStarvation();
+                gameLogic.LoseGame();
                 Debug.Log("Lost Game: Starvation");
             }
         }

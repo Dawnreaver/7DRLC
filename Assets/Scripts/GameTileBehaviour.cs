@@ -300,10 +300,14 @@ public class GameTileBehaviour : MonoBehaviour
             {
                 // will not despawn, turn tile into tiletype watertile instead
                 tileType = GameTileTypes.WaterTile;
+                pirateShip  = null;
+                Debug.Log("PirateShip has a target, turning to wate tile");
             }
             else
             {
+                Debug.Log("Start Despawn");
                 gameLogic.ReturnPirateToPool(pirateShip);
+                pirateShip  = null;
             }
         }
     }
