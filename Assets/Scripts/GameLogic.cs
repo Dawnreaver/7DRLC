@@ -176,6 +176,7 @@ public class GameLogic : MonoBehaviour
             pirate.name = "PirateShip";
             m_piratePool.Add(pirate);
             pirate.transform.SetParent(gameObject.transform);
+            pirate.GetComponent<PirateShipBehaviour>().gameLogic = this;
             pirate.SetActive(false);
         }
     }
@@ -715,6 +716,7 @@ public class GameLogic : MonoBehaviour
                     PurgeGameTile(tile, GameTileTypes.WaterTile);
                     obj.loot += Random.Range(3,10);
                     obj.food += Random.Range(1,4);
+                    tile.DespawnPirate();
                     GenerateBeatPirate();
                 }
             }
@@ -734,6 +736,7 @@ public class GameLogic : MonoBehaviour
                     PurgeGameTile(tile, GameTileTypes.WaterTile);
                     obj.loot += Random.Range(3,10);
                     obj.food += Random.Range(1,4);
+                    tile.DespawnPirate();
                     GenerateBeatPirate();
                 }
 

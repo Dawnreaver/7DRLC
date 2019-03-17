@@ -28,12 +28,12 @@ public class ActionScreenBehaviour : MonoBehaviour
         {
             m_playerBehaviour = gameLogic.playerObject.GetComponent<PlayerBehaviour>();
         }
-        if(m_playerBehaviour.loot < 1)
+        if(m_playerBehaviour.loot == 0)
         {
             ButtonTradeFood.GetComponent<Button>().interactable = false;
             ButtonTradeWeapon.GetComponent<Button>().interactable = false;
         }
-        if(m_playerBehaviour.loot > 1 && m_playerBehaviour.loot < 5)
+        if(m_playerBehaviour.loot >= 1 && m_playerBehaviour.loot < 5)
         {
             ButtonTradeFood.GetComponent<Button>().interactable = true;
             ButtonTradeWeapon.GetComponent<Button>().interactable = false;
