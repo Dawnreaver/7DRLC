@@ -135,7 +135,7 @@ public class GameLogic : MonoBehaviour
         SpawnStartArea(gameTileStartPosition);
         SpawnPlayer();
         mainCamera.SetCameraMovementSpeed(cameraMOvementSpeed);
-        //ApplyFog();
+        ApplyFog();
     }
 
     public void StartGame()
@@ -320,6 +320,7 @@ public class GameLogic : MonoBehaviour
                 }
             }
         }
+        Debug.Log(potentialSpawnPositions.Count);
             // remove used tiles that are no longer needed
             for(int a = 0; a < usedGameTiles.Count; a++)
             {
@@ -364,6 +365,7 @@ public class GameLogic : MonoBehaviour
                             // work on pirate spawn here
                             //gameTile.gameTileObject.SetActive(false);
                             GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
+                            m_piratePool.Remove(pirateShip);
                             pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
                             PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
                             //pirate.sightedPrey = true;
@@ -407,6 +409,7 @@ public class GameLogic : MonoBehaviour
                             // work on pirate spawn here
                             //gameTile.gameTileObject.SetActive(false);
                             GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
+                            m_piratePool.Remove(pirateShip);
                             pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
                             PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
                             //pirate.sightedPrey = true;
@@ -433,97 +436,95 @@ public class GameLogic : MonoBehaviour
     }
     void ApplyFog()
     {
-        
         // start position fog
-        /* for(int x = (int) gameTileStartPosition.x-3; x < (int)gameTileStartPosition.x+4; x++)
-        {
-            for(int z = (int) gameTileStartPosition.z-3; z < (int)gameTileStartPosition.z+4; z++)
-            {
-                if( x == gameTileStartPosition.x+3 && z == gameTileStartPosition.z-3 || 
-                    x == gameTileStartPosition.x-3 && z == gameTileStartPosition.z+3 || 
-                    x == gameTileStartPosition.x-3 && z == gameTileStartPosition.z-3 || 
-                    x == gameTileStartPosition.x+3 && z == gameTileStartPosition.z+3)
-                {
-                    //Debug.Log("Corner: "+x+","+z);
-                }
-                else{
-                    Vector2 newPos = new Vector2(x,z);
-                    fogPosition.Add(newPos);
-                }
-            }
-        }*/
-
-        // for(int x = (int)gameTileStartPosition.x-startAreaSize-1; x < (int)gameTileStartPosition.x+startAreaSize+1; x++)
+        // for(int x = (int) gameTileStartPosition.x-3; x < (int)gameTileStartPosition.x+4; x++)
         // {
-        //     for(int z = (int)gameTileStartPosition.z-startAreaSize-1; z < (int)gameTileStartPosition.z+startAreaSize+1; z++)
+        //     for(int z = (int) gameTileStartPosition.z-3; z < (int)gameTileStartPosition.z+4; z++)
         //     {
-        //         if(Vector3.Distance(gameTileStartPosition, new Vector3(x,gameTileStartPositionHeight,z)) <= startAreaRadius+1)             
+        //         if( x == gameTileStartPosition.x+3 && z == gameTileStartPosition.z-3 || 
+        //             x == gameTileStartPosition.x-3 && z == gameTileStartPosition.z+3 || 
+        //             x == gameTileStartPosition.x-3 && z == gameTileStartPosition.z-3 || 
+        //             x == gameTileStartPosition.x+3 && z == gameTileStartPosition.z+3)
         //         {
+        //             //Debug.Log("Corner: "+x+","+z);
+        //         }
+        //         else{
         //             Vector2 newPos = new Vector2(x,z);
         //             fogPosition.Add(newPos);
         //         }
         //     }
         // }
 
-        // Player Fog
-        /* for(int a = (int)playerObject.transform.position.x-2; a < (int)playerObject.transform.position.x+3; a++)
+        for(int x = (int)gameTileStartPosition.x-startAreaSize-1; x < (int)gameTileStartPosition.x+startAreaSize+1; x++)
         {
-            for(int b = (int)playerObject.transform.position.z-2; b < (int)playerObject.transform.position.z+3; b++)
+            for(int z = (int)gameTileStartPosition.z-startAreaSize-1; z < (int)gameTileStartPosition.z+startAreaSize+1; z++)
             {
-                Vector2 newPos = new Vector2(a,b);
-                if(!fogPosition.Contains(newPos))
+                if(Vector3.Distance(gameTileStartPosition, new Vector3(x,gameTileStartPositionHeight,z)) <= startAreaRadius+1)             
                 {
+                    Vector2 newPos = new Vector2(x,z);
                     fogPosition.Add(newPos);
                 }
             }
-        }*/
-        // for(int x = (int)playerObject.transform.position.x-playerFeeldOfView-1; x < (int)playerObject.transform.position.x+playerFeeldOfView+1; x++)
+        }
+
+        // Player Fog
+        // for(int a = (int)playerObject.transform.position.x-2; a < (int)playerObject.transform.position.x+3; a++)
         // {
-        //     for(int z = (int)playerObject.transform.position.z-playerFeeldOfView-1; z < (int)playerObject.transform.position.z+playerFeeldOfView+1; z++)
+        //     for(int b = (int)playerObject.transform.position.z-2; b < (int)playerObject.transform.position.z+3; b++)
         //     {
-        //         if(Vector3.Distance(playerObject.transform.position, new Vector3(x,gameTileStartPositionHeight,z)) <= playerFeeldOfViewRadius+1)
+        //         Vector2 newPos = new Vector2(a,b);
+        //         if(!fogPosition.Contains(newPos))
         //         {
-        //             Vector2 newPos = new Vector2(x,z);
-        //             if(!fogPosition.Contains(newPos))
-        //             {
-        //                 fogPosition.Add(newPos);
-        //             }
+        //             fogPosition.Add(newPos);
         //         }
         //     }
         // }
+        for(int x = (int)playerObject.transform.position.x-playerFeeldOfView-1; x < (int)playerObject.transform.position.x+playerFeeldOfView+1; x++)
+        {
+            for(int z = (int)playerObject.transform.position.z-playerFeeldOfView-1; z < (int)playerObject.transform.position.z+playerFeeldOfView+1; z++)
+            {
+                if(Vector3.Distance(playerObject.transform.position, new Vector3(x,gameTileStartPositionHeight,z)) <= playerFeeldOfViewRadius+1)
+                {
+                    Vector2 newPos = new Vector2(x,z);
+                    if(!fogPosition.Contains(newPos))
+                    {
+                        fogPosition.Add(newPos);
+                    }
+                }
+            }
+        }
 
-        // for(int c = 0; c < usedGameTiles.Count; c++)
-        // {
-        //     Vector2 newPos = new Vector2(usedGameTiles[c].transform.position.x,usedGameTiles[c].transform.position.z);
-        //     if(fogPosition.Contains(newPos))
-        //     {
-        //         fogPosition.Remove(newPos);
-        //     }
-        // }
-        // for(int d = 0; d < m_gameTilesStartArea.Count; d++)
-        // {
-        //     Vector2 newPos = new Vector2(m_gameTilesStartArea[d].transform.position.x,m_gameTilesStartArea[d].transform.position.z);
-        //     if(fogPosition.Contains(newPos))
-        //     {
-        //         fogPosition.Remove(newPos);
-        //     }
-        // }
-        // for(int e = 0; e < fogObjectsPool.Count; e++)
-        // {
-        //     if(e < fogPosition.Count)
-        //     {
-        //         fogObjectsPool[e].transform.position = new Vector3(fogPosition[e].x, 0.0f,fogPosition[e].y);
-        //         fogObjectsPool[e].SetActive(true);
-        //     }
-        //     else
-        //     {
-        //         fogObjectsPool[e].transform.position = Vector3.zero;
-        //         fogObjectsPool[e].SetActive(false);
-        //     }
-        // }
+        for(int c = 0; c < usedGameTiles.Count; c++)
+        {
+            Vector2 newPos = new Vector2(usedGameTiles[c].transform.position.x,usedGameTiles[c].transform.position.z);
+            if(fogPosition.Contains(newPos))
+            {
+                fogPosition.Remove(newPos);
+            }
+        }
+        for(int d = 0; d < m_gameTilesStartArea.Count; d++)
+        {
+            Vector2 newPos = new Vector2(m_gameTilesStartArea[d].transform.position.x,m_gameTilesStartArea[d].transform.position.z);
+            if(fogPosition.Contains(newPos))
+            {
+                fogPosition.Remove(newPos);
+            }
+        }
+        for(int e = 0; e < fogObjectsPool.Count; e++)
+        {
+            if(e < fogPosition.Count)
+            {
+                fogObjectsPool[e].transform.position = new Vector3(fogPosition[e].x, 0.0f,fogPosition[e].y);
+                fogObjectsPool[e].SetActive(true);
+            }
+            else
+            {
+                fogObjectsPool[e].transform.position = Vector3.zero;
+                fogObjectsPool[e].SetActive(false);
+            }
+        }
 
-        // fogPosition.Clear();
-        
+        fogPosition.Clear();
     }
 
     void ReturnGameTileToPool(GameObject tile)
@@ -531,6 +532,7 @@ public class GameLogic : MonoBehaviour
         GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
         if(gameTile.pirateShip != null)
         {
+            Debug.Log("Return tile to pool");
             gameTile.DespawnPirate();
         }
         gameTilesDictionary.Remove(gameTile.ReturnPosition());

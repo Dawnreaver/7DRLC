@@ -154,7 +154,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     public void QuitToMainMenu()
     {
-        Debug.Log("Quitting to main menu, resetting game");
+        //Debug.Log("Quitting to main menu, resetting game");
         gameLogic.gameStarted = false;
         DisableEndGameScreen();
         DiableSagaScreen();

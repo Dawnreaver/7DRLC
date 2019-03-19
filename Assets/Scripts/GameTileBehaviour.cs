@@ -220,7 +220,7 @@ public class GameTileBehaviour : MonoBehaviour
         string[] information = informationToLoad.Split(',');
 
         tileType = (GameTileTypes) System.Enum.Parse( typeof(GameTileTypes), information[0] );
-        Debug.Log(tileType);
+        //Debug.Log(tileType);
 
         tileName = information[1];
 
