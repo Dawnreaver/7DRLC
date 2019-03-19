@@ -24,24 +24,12 @@ public class GameTileBehaviour : MonoBehaviour
     private float m_actionIndicatorRotationSpeed = 60.0f;
     void OnEnable()
     {
-        /* if(isStartAreaTile)
-        {
-            gameObject.name = "StartTile "+transform.position.x+"/"+transform.position.z;
-        }
-        else
-        {
-            gameObject.name = "GameTile "+transform.position.x+"/"+transform.position.z;
-        }*/
-
         DisableActionIndicator();
     }
 
     void FixedUpdate()
     { 
-        //if(actionIndicator != null && tileType == GameTileTypes.VinlandTile || actionIndicator != null && tileType == GameTileTypes.StartVillageTile || actionIndicator != null && tileType == GameTileTypes.PirateTile || actionIndicator != null && tileType == GameTileTypes.SerpentTile) //|| actionIndicator != null && tileType == GameTileTypes.SecretTile
-        //{
-            actionIndicator.transform.Rotate(Vector3.up, m_actionIndicatorRotationSpeed*Time.deltaTime);
-        //}        
+        actionIndicator.transform.Rotate(Vector3.up, m_actionIndicatorRotationSpeed*Time.deltaTime);
     }
    public void SetTileType(GameTileTypes type)
     {
@@ -97,22 +85,11 @@ public class GameTileBehaviour : MonoBehaviour
                 gameTileObject.tag="SerpentTile";
             break;
 
-            /* case GameTileTypes.MaelstromTile :
-                gameTileObject.SetActive(true);
-                gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[6];
-                 gameTileObject.tag="MaelstromTile";
-            break;*/
-
             case GameTileTypes.VinlandTile :
                 gameTileObject.SetActive(true);
                 gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[7];
                 gameTileObject.tag="VinlandTile";
             break;
-            /* case GameTileTypes.SecretTile :
-                gameTileObject.SetActive(true);
-                gameTileObject.GetComponent<Renderer>().material = gameTileMaterials[8];
-                gameTileObject.tag="SecretTile";
-            break;*/
         }
     }
 
@@ -124,10 +101,6 @@ public class GameTileBehaviour : MonoBehaviour
             case GameTileTypes.StartVillageTile :
                 obj.mesh = gameTileMeshes[0];
             break;
-
-            /*case GameTileTypes.WaterTile :
-                
-            break; */
 
             case GameTileTypes.VillageTile :
                 if( isRansacked == 0 )
@@ -156,7 +129,6 @@ public class GameTileBehaviour : MonoBehaviour
             break;
 
             case GameTileTypes.PirateTile :
-                //obj.mesh = gameTileMeshes[4];
                 gameTileObject.SetActive(false);
             break;
 
@@ -164,16 +136,9 @@ public class GameTileBehaviour : MonoBehaviour
                 obj.mesh = gameTileMeshes[5];
             break;
 
-            /* case GameTileTypes.MaelstromTile :
-                obj.mesh = gameTileMeshes[6];
-            break;*/
-
             case GameTileTypes.VinlandTile :
                 obj.mesh = gameTileMeshes[7];
             break;
-            /* case GameTileTypes.SecretTile :
-                obj.mesh = gameTileMeshes[8];
-            break;*/
         }
     }
     void InitialiseInteractableObject()
@@ -222,17 +187,9 @@ public class GameTileBehaviour : MonoBehaviour
                 actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[4];
             break;
 
-            /* case GameTileTypes.SecretTile :
-                actionIndicator.GetComponent<MeshFilter>().mesh = actionIndicatorMesh[5];
-            break;*/
-
             case GameTileTypes.WaterTile :
                 actionIndicator.GetComponent<MeshFilter>().mesh = null;
             break;
-
-            /* case GameTileTypes.MaelstromTile :
-                actionIndicator.GetComponent<MeshFilter>().mesh = null;
-            break;*/
         }
     }
     public void EnableActionIndicator(Vector3 playerLookDiretion)
@@ -242,15 +199,6 @@ public class GameTileBehaviour : MonoBehaviour
         {
             actionIndicator.transform.rotation = Quaternion.LookRotation(playerLookDiretion,Vector3.up);
         }
-        /* else if(tileType == GameTileTypes.VillageTile || tileType == GameTileTypes.TraderTile)
-        {
-            actionIndicator.transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
-        }
-        else if(tileType == GameTileTypes.PirateTile || tileType == GameTileTypes.SerpentTile)
-        {
-            actionIndicator.transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
-        }*/
-
     }
 
     public void DisableActionIndicator()
@@ -286,7 +234,6 @@ public class GameTileBehaviour : MonoBehaviour
         string infoToSerialise ="";
 
         infoToSerialise = ""+ tileType.ToString()+","+tileName+","+isRansacked;
-        //Debug.Log(infoToSerialise);
         return infoToSerialise;
     }
 
