@@ -16,6 +16,11 @@ public class PirateShipBehaviour : MonoBehaviour
     public int followThreshold = 15; // number of fields the pirate will follow beforr abandoning the chase
     private int m_follow = 0;
     public bool takeTurn = false;
+    public List<Vector3> m_pathToPrey = new List<Vector3>();
+
+    public bool foundPathToPrey = false;
+
+    private Vector3 m_oldPreyPosition;
 
     void FixedUpdate()
     {
@@ -108,7 +113,7 @@ public class PirateShipBehaviour : MonoBehaviour
 
     void FollowPreyObject()
     {
-        Vector3 newPosition;
+        /*Vector3 newPosition;
         float distanceToPlayer = 2000.0f;
 
         List<Vector3> possiblePositions = new List<Vector3>()
@@ -139,7 +144,27 @@ public class PirateShipBehaviour : MonoBehaviour
                 }
             }
         }
+         */
+        if(m_oldPreyPosition != preyObject.transform.position)
+        {
+             foundPathToPrey = false;
+             m_oldPreyPosition = preyObject.transform.position;
+        }
 
+        if(!foundPathToPrey)
+        {
+            FindPathToprey();
+        }
+        else
+        {
+            transform.position = m_pathToPrey[m_pathToPrey.Count-1];
+            m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
+
+            if(m_pathToPrey.Count == 0)
+            {
+                // fight player
+            }
+        }
 
     }
 
@@ -151,5 +176,71 @@ public class PirateShipBehaviour : MonoBehaviour
     void ResetPirateShip()
     {
         m_follow = 0;
+    }
+
+    void FindPathToprey()
+    {
+        m_pathToPrey.Clear();
+
+        // add player position
+        m_pathToPrey.Add(preyObject.transform.position);
+
+        //while(m_pathToPrey[m_pathToPrey.Count-1] != transform.position)
+        //{
+
+            for (int a = 0; a < 20; a++)
+            {
+                if(m_pathToPrey[m_pathToPrey.Count-1] != transform.position)
+                {
+                    Vector3 currentPos = m_pathToPrey[m_pathToPrey.Count-1];
+                    Vector3 newPos = TryNextNodeCloserToMe(currentPos);
+                    m_pathToPrey.Add(newPos);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        //}
+
+        foundPathToPrey =  true;
+    }
+
+    Vector3 TryNextNodeCloserToMe(Vector3 currentPos)
+    {
+        Vector3 newPos = new Vector3();
+
+        float   distanceToMyself = Mathf.Infinity;
+
+        List<Vector3> possiblePositions = new List<Vector3>()
+        {
+            new Vector3(currentPos.x, currentPos.y, currentPos.z+1),
+            new Vector3(currentPos.x, currentPos.y, currentPos.z-1),
+            new Vector3(currentPos.x+1, currentPos.y, currentPos.z),
+            new Vector3(currentPos.x-1, currentPos.y, currentPos.z)
+        };
+
+         for(int a = 0; a < possiblePositions.Count;a++)
+        {
+            for(int b = 0; b < gameLogic.usedGameTiles.Count; b++)
+            {
+                if(gameLogic.usedGameTiles[b].transform.position == possiblePositions[a] && gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile)
+                {
+                   
+                    float tempDistance = Vector3.Distance(possiblePositions[a], transform.position);
+
+                    if( tempDistance < distanceToMyself)
+                    {
+                         Debug.Log("Found position: "+ possiblePositions[a]);
+                        distanceToMyself = tempDistance;
+                        Debug.Log("Move to position...");
+                        newPos = possiblePositions[a];
+                    }
+                }
+            }
+        }
+
+        return newPos;
+
     }
 }
