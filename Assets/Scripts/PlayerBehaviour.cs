@@ -119,6 +119,8 @@ public class PlayerBehaviour : MonoBehaviour
     public int loot = 0;
     public int weapons = 0;
     
+    public bool playerTookTurn = false;
+
     void Start()
     {
         /*for( int a = 0; a < 10; a++)
@@ -130,7 +132,7 @@ public class PlayerBehaviour : MonoBehaviour
     void Update()
     {
         GameTileBehaviour obj = lastLookedAtObject.GetComponent<GameTileBehaviour>();
-        if(gameLogic.gameStarted && !gameLogic.menuEnabled)
+        if(gameLogic.gameStarted && !gameLogic.menuEnabled && !playerTookTurn)
         {
             float moveDistance = 1.0f;
             if(Input.GetKeyDown("w") || Input.GetKeyDown("up"))
@@ -155,6 +157,8 @@ public class PlayerBehaviour : MonoBehaviour
                     CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
+
+                    SetPlayerTurn(true);
                 }
             }
             if(Input.GetKeyDown("s")|| Input.GetKeyDown("down"))
@@ -179,6 +183,8 @@ public class PlayerBehaviour : MonoBehaviour
                     CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
+
+                    SetPlayerTurn(true);
                 }
             }
             if(Input.GetKeyDown("a")|| Input.GetKeyDown("left"))
@@ -203,6 +209,8 @@ public class PlayerBehaviour : MonoBehaviour
                     CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
+
+                    SetPlayerTurn(true);
                 }
             }
             if(Input.GetKeyDown("d")|| Input.GetKeyDown("right"))
@@ -227,6 +235,8 @@ public class PlayerBehaviour : MonoBehaviour
                     CheckForUneventulJourney();
                     CheckForAttackOnGameTile();
                     CheckIfReachedVinland();
+
+                    SetPlayerTurn(true);
                 }
             }
         }
@@ -394,5 +404,10 @@ public class PlayerBehaviour : MonoBehaviour
         vinland = "<color=red>Vinland</color>";
        
        gameLogic.sagaLogic.AddSagaContent( "This is the story of "+playerName + playerAttribute + father+" and " + mother + ", who set out in the month of " + month + " on" + personalPronoun + "proud vessel " + shipName + " with a band of " + crew + " on the search for " + vinland + ".");
+    }
+
+    public void SetPlayerTurn(bool tookTurn)
+    {
+        playerTookTurn = tookTurn;
     }
 }

@@ -47,6 +47,7 @@ public class GameLogic : MonoBehaviour
 
     public GameObject piratePrefab;
     List<GameObject> m_piratePool = new List<GameObject>();
+    List<GameObject> m_activePirateShips = new List<GameObject>();
     int m_piratePoolSize = 12;
 
     public int uneventfulJourneyCount = 0;
@@ -120,8 +121,10 @@ public class GameLogic : MonoBehaviour
     public int startAreaSize = 10;
     public float startAreaRadius = 4.0f;
     public int playerFeeldOfView = 3;
-     public float playerFeeldOfViewRadius = 3.5f;
+    public float playerFeeldOfViewRadius = 3.5f;
 
+    private bool m_processTurnOrder = false;
+    public float turnTime = 0.1f;
 
     Dictionary<Vector2, string> gameTilesDictionary = new Dictionary<Vector2, string>();
     // Start is called before the first frame update
@@ -152,7 +155,16 @@ public class GameLogic : MonoBehaviour
             m_oldPlayerPosition = m_playerPosition;
             SpawnAndDespawnBoardTiles();
         }
+        GoThroughTurnOrder();
+    }
 
+    void GoThroughTurnOrder()
+    {
+        if(playerObject.GetComponent<PlayerBehaviour>().playerTookTurn && !m_processTurnOrder)
+        {
+            m_processTurnOrder = true;
+            StartCoroutine("ProcessEnemyTurns");
+        }
     }
 
     void PoolGameObjects()
@@ -366,6 +378,7 @@ public class GameLogic : MonoBehaviour
                             //gameTile.gameTileObject.SetActive(false);
                             GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
                             m_piratePool.Remove(pirateShip);
+                            m_activePirateShips.Add(pirateShip);
                             pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
                             PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
                             //pirate.sightedPrey = true;
@@ -410,6 +423,7 @@ public class GameLogic : MonoBehaviour
                             //gameTile.gameTileObject.SetActive(false);
                             GameObject pirateShip = m_piratePool[m_piratePool.Count-1];
                             m_piratePool.Remove(pirateShip);
+                            m_activePirateShips.Add(pirateShip);
                             pirateShip.transform.position = new Vector3(tile.transform.position.x,0.0f, tile.transform.position.z);
                             PirateShipBehaviour pirate = pirateShip.GetComponent<PirateShipBehaviour>();
                             //pirate.sightedPrey = true;
@@ -547,6 +561,7 @@ public class GameLogic : MonoBehaviour
     {
         pirate.transform.position = transform.position;
         pirate.SetActive(false);
+        m_activePirateShips.Remove(pirate);
         m_piratePool.Add(pirate);
     }
 
@@ -908,6 +923,14 @@ public class GameLogic : MonoBehaviour
         obj.weapons +=1;
         // spawn some form of effects ?
         GenerateTraderTrade();
+    }
+
+    IEnumerator ProcessEnemyTurns()
+    {
+        yield return new WaitForSeconds(turnTime);
+        playerObject.GetComponent<PlayerBehaviour>().SetPlayerTurn(false);
+        m_processTurnOrder = false;
+        //return null;
     }
 
     // Strings for saga
