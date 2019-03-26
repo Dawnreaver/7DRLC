@@ -47,7 +47,7 @@ public class GameLogic : MonoBehaviour
 
     public GameObject piratePrefab;
     List<GameObject> m_piratePool = new List<GameObject>();
-    List<GameObject> m_activePirateShips = new List<GameObject>();
+    public List<GameObject> m_activePirateShips = new List<GameObject>();
     int m_piratePoolSize = 12;
 
     public int uneventfulJourneyCount = 0;
@@ -927,6 +927,13 @@ public class GameLogic : MonoBehaviour
 
     IEnumerator ProcessEnemyTurns()
     {
+        for ( int a = 0; a < m_activePirateShips.Count; a++)
+        {
+            m_activePirateShips[a].GetComponent<PirateShipBehaviour>().takeTurn = true;
+            Debug.Log("pirate takes turn");
+            yield return new WaitForSeconds(turnTime);
+        }
+
         yield return new WaitForSeconds(turnTime);
         playerObject.GetComponent<PlayerBehaviour>().SetPlayerTurn(false);
         m_processTurnOrder = false;
