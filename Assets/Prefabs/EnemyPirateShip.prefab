@@ -90,3 +90,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5d4e86ea462d9642a86e32cbe18b803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
+  gameLogic: {fileID: 0}
+  preyObject: {fileID: 0}
+  tileOrigin: {x: 0, y: 0}
+  lineOfSight: 4
+  sightedPrey: 0
+  followThreshold: 15
+  takeTurn: 0
+  m_pathToPrey: []
+  foundPathToPrey: 0

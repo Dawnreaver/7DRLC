@@ -918,7 +918,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &191034786
 GameObject:
@@ -3173,7 +3173,7 @@ RectTransform:
   - {fileID: 924819008}
   - {fileID: 2082608511}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4657,7 +4657,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &981783689
 GameObject:
@@ -6955,12 +6955,14 @@ MonoBehaviour:
   vinlandTileHasSpawned: 0
   piratePrefab: {fileID: 1407308105454628455, guid: 3d414388e4b91ec4ea79e87db9dc73f0,
     type: 3}
+  m_activePirateShips: []
   uneventfulJourneyCount: 0
   sagaLogic: {fileID: 1950240623}
   startAreaSize: 10
   startAreaRadius: 3.5
   playerFeeldOfView: 4
   playerFeeldOfViewRadius: 2.75
+  turnTime: 0.1
 --- !u!4 &1550175255
 Transform:
   m_ObjectHideFlags: 0
@@ -6973,7 +6975,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1596260161
 GameObject:
@@ -9016,77 +9018,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &8010230843752744837
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 408976997166012048, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_Name
-      value: GameTilePrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7260904482283097432, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5919625972507005543, guid: 27f9c717a45921c478a525cca3e5aafc,
-        type: 3}
-      propertyPath: gameLogic
-      value: 
-      objectReference: {fileID: 1550175254}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 27f9c717a45921c478a525cca3e5aafc, type: 3}

@@ -39,8 +39,13 @@ public class PirateShipBehaviour : MonoBehaviour
     {
         if(!sightedPrey)
         {
-            SpottingPrey();
             //TurnInRandomDirection();
+            SpottingPrey();
+            if(sightedPrey)
+            {
+                FindPathToprey();
+            }
+            
         }
         else
         {
@@ -154,6 +159,8 @@ public class PirateShipBehaviour : MonoBehaviour
         if(!foundPathToPrey)
         {
             FindPathToprey();
+            transform.position = m_pathToPrey[m_pathToPrey.Count-1];
+            m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
         }
         else
         {
@@ -170,7 +177,24 @@ public class PirateShipBehaviour : MonoBehaviour
 
     void TurnInRandomDirection()
     {
-        
+        int randomShipRotation = Random.Range(0,4);
+
+        if(randomShipRotation == 0)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+        }
+        else if(randomShipRotation == 1)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+        }
+        else if(randomShipRotation == 2)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+        }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
+        }
     }
 
     void ResetPirateShip()
@@ -220,7 +244,7 @@ public class PirateShipBehaviour : MonoBehaviour
             new Vector3(currentPos.x-1, currentPos.y, currentPos.z)
         };
 
-         for(int a = 0; a < possiblePositions.Count;a++)
+        for(int a = 0; a < possiblePositions.Count;a++)
         {
             for(int b = 0; b < gameLogic.usedGameTiles.Count; b++)
             {
@@ -235,6 +259,7 @@ public class PirateShipBehaviour : MonoBehaviour
                         distanceToMyself = tempDistance;
                         Debug.Log("Move to position...");
                         newPos = possiblePositions[a];
+                        Debug.Log(newPos);
                     }
                 }
             }
@@ -242,5 +267,14 @@ public class PirateShipBehaviour : MonoBehaviour
 
         return newPos;
 
+    }
+    void OnDrawGizmos()
+    {
+        for(int a = 0; a < m_pathToPrey.Count; a++)
+        {
+            Vector3 pos = new Vector3(m_pathToPrey[a].x, 1.0f, m_pathToPrey[a].z);
+            Gizmos.DrawSphere(pos,0.25f);
+        }
+        
     }
 }
