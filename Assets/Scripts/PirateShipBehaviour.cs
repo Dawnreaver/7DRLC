@@ -49,6 +49,7 @@ public class PirateShipBehaviour : MonoBehaviour
         }
         else
         {
+            FindPathToprey();
             FollowPreyObject();
         }
     }
@@ -118,38 +119,6 @@ public class PirateShipBehaviour : MonoBehaviour
 
     void FollowPreyObject()
     {
-        /*Vector3 newPosition;
-        float distanceToPlayer = 2000.0f;
-
-        List<Vector3> possiblePositions = new List<Vector3>()
-        {
-            new Vector3(transform.position.x, gameLogic.gameTileStartPositionHeight, transform.position.z+1),
-            new Vector3(transform.position.x, gameLogic.gameTileStartPositionHeight, transform.position.z-1),
-            new Vector3(transform.position.x-1, gameLogic.gameTileStartPositionHeight, transform.position.z),
-            new Vector3(transform.position.x+1, gameLogic.gameTileStartPositionHeight, transform.position.z)
-        };
-        Debug.Log("Looking for position close to player...");
-        for(int a = 0; a < possiblePositions.Count;a++)
-        {
-            for(int b = 0; b < gameLogic.usedGameTiles.Count; b++)
-            {
-                if(gameLogic.usedGameTiles[b].transform.position == possiblePositions[a] && gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile)
-                {
-                   
-                    float tempDistance = Vector3.Distance(possiblePositions[a], preyObject.transform.position);
-
-                    if( tempDistance < distanceToPlayer)
-                    {
-                         Debug.Log("Found position: "+ possiblePositions[a]);
-                        distanceToPlayer = tempDistance;
-                        newPosition = new Vector3(possiblePositions[a].x, transform.position.y,possiblePositions[a].z);
-                        Debug.Log("Move to position...");
-                        transform.position = newPosition;
-                    }
-                }
-            }
-        }
-         */
         if(m_oldPreyPosition != preyObject.transform.position)
         {
              foundPathToPrey = false;
@@ -212,17 +181,13 @@ public class PirateShipBehaviour : MonoBehaviour
         //while(m_pathToPrey[m_pathToPrey.Count-1] != transform.position)
         //{
 
-            for (int a = 0; a < 20; a++)
+            for (int a = 0; a < 3; a++)
             {
-                if(m_pathToPrey[m_pathToPrey.Count-1] != transform.position)
+                Vector3 currentPos = m_pathToPrey[m_pathToPrey.Count-1];
+                Vector3 newPos = TryNextNodeCloserToMe(currentPos);
+                if(newPos.x != transform.position.x && newPos.z != transform.position.z)
                 {
-                    Vector3 currentPos = m_pathToPrey[m_pathToPrey.Count-1];
-                    Vector3 newPos = TryNextNodeCloserToMe(currentPos);
                     m_pathToPrey.Add(newPos);
-                }
-                else
-                {
-                    break;
                 }
             }
         //}
@@ -232,9 +197,9 @@ public class PirateShipBehaviour : MonoBehaviour
 
     Vector3 TryNextNodeCloserToMe(Vector3 currentPos)
     {
-        Vector3 newPos = new Vector3();
+        Vector3 newPos = currentPos;
 
-        float   distanceToMyself = Mathf.Infinity;
+        float   distanceToMyself = 200.0f;
 
         List<Vector3> possiblePositions = new List<Vector3>()
         {
@@ -248,25 +213,28 @@ public class PirateShipBehaviour : MonoBehaviour
         {
             for(int b = 0; b < gameLogic.usedGameTiles.Count; b++)
             {
-                if(gameLogic.usedGameTiles[b].transform.position == possiblePositions[a] && gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile)
+                if(gameLogic.usedGameTiles[b].transform.position.x == possiblePositions[a].x && gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile)
                 {
                    
                     float tempDistance = Vector3.Distance(possiblePositions[a], transform.position);
 
-                    if( tempDistance < distanceToMyself)
+                    for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++)
                     {
-                         Debug.Log("Found position: "+ possiblePositions[a]);
-                        distanceToMyself = tempDistance;
-                        Debug.Log("Move to position...");
-                        newPos = possiblePositions[a];
-                        Debug.Log(newPos);
+                        if(gameLogic.m_activePirateShips[c].transform.position.x != possiblePositions[a].x && gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z)
+                        {
+                            if( tempDistance < distanceToMyself)
+                            {
+                                Debug.Log("Found position: "+ possiblePositions[a]);
+                                distanceToMyself = tempDistance;
+                                Debug.Log("Move to position...");
+                                newPos = possiblePositions[a];
+                            }
+                        }
                     }
                 }
             }
         }
-
         return newPos;
-
     }
     void OnDrawGizmos()
     {
