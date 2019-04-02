@@ -5,7 +5,6 @@ using UnityEngine;
 public class PirateShipBehaviour : MonoBehaviour
 {
     public bool debug = false;
-
     public GameLogic gameLogic;
     public GameObject preyObject;
     public Vector2 tileOrigin = new Vector2();
@@ -26,7 +25,7 @@ public class PirateShipBehaviour : MonoBehaviour
     {
         if(debug)
         {
-            Debug.Log(transform.localRotation.y);
+            //Debug.Log(transform.localRotation.y);
         }
         if(takeTurn)
         {
@@ -70,7 +69,7 @@ public class PirateShipBehaviour : MonoBehaviour
                     
                     if(pPos == sPos)
                     {
-                        Debug.Log("Spotted preyObject");
+                        //Debug.Log("Spotted preyObject");
                         sightedPrey = true;
                     }
                 }
@@ -83,7 +82,7 @@ public class PirateShipBehaviour : MonoBehaviour
                     
                     if(pPos == sPos)
                     {
-                        Debug.Log("Spotted preyObject");
+                        //Debug.Log("Spotted preyObject");
                         sightedPrey = true;
                     }
                 }
@@ -96,7 +95,7 @@ public class PirateShipBehaviour : MonoBehaviour
                     
                     if(pPos == sPos)
                     {
-                        Debug.Log("Spotted preyObject");
+                        //Debug.Log("Spotted preyObject");
                         sightedPrey = true;
                     }
                 }
@@ -109,7 +108,7 @@ public class PirateShipBehaviour : MonoBehaviour
                     
                     if(pPos == sPos)
                     {
-                        Debug.Log("Spotted preyObject");
+                        //Debug.Log("Spotted preyObject");
                         sightedPrey = true;
                     }
                 }
@@ -130,11 +129,13 @@ public class PirateShipBehaviour : MonoBehaviour
             FindPathToprey();
             transform.position = m_pathToPrey[m_pathToPrey.Count-1];
             m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
+            Debug.Log("Follow: No path first");
         }
         else
         {
             transform.position = m_pathToPrey[m_pathToPrey.Count-1];
             m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
+            Debug.Log("Follow: Path first");
 
             if(m_pathToPrey.Count == 0)
             {
@@ -181,13 +182,19 @@ public class PirateShipBehaviour : MonoBehaviour
         //while(m_pathToPrey[m_pathToPrey.Count-1] != transform.position)
         //{
 
-            for (int a = 0; a < 3; a++)
+            for (int a = 0; a < 5; a++)
             {
                 Vector3 currentPos = m_pathToPrey[m_pathToPrey.Count-1];
                 Vector3 newPos = TryNextNodeCloserToMe(currentPos);
                 if(newPos.x != transform.position.x && newPos.z != transform.position.z)
                 {
                     m_pathToPrey.Add(newPos);
+                }
+                else
+                {
+                    Debug.Log(a);
+                    Debug.Log("Found a path");
+                    break;
                 }
             }
         //}
@@ -224,9 +231,8 @@ public class PirateShipBehaviour : MonoBehaviour
                         {
                             if( tempDistance < distanceToMyself)
                             {
-                                Debug.Log("Found position: "+ possiblePositions[a]);
+                                //Debug.Log("Found position: "+ possiblePositions[a] + " Distance: "+ tempDistance);
                                 distanceToMyself = tempDistance;
-                                Debug.Log("Move to position...");
                                 newPos = possiblePositions[a];
                             }
                         }

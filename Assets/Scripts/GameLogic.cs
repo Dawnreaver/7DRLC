@@ -332,7 +332,7 @@ public class GameLogic : MonoBehaviour
                 }
             }
         }
-        Debug.Log(potentialSpawnPositions.Count);
+        //Debug.Log(potentialSpawnPositions.Count);
             // remove used tiles that are no longer needed
             for(int a = 0; a < usedGameTiles.Count; a++)
             {
