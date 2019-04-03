@@ -546,7 +546,6 @@ public class GameLogic : MonoBehaviour
         GameTileBehaviour gameTile = tile.GetComponent<GameTileBehaviour>();
         if(gameTile.pirateShip != null)
         {
-            Debug.Log("Return tile to pool");
             gameTile.DespawnPirate();
         }
         gameTilesDictionary.Remove(gameTile.ReturnPosition());
@@ -603,7 +602,6 @@ public class GameLogic : MonoBehaviour
         float randomEventTile;
         
         randomValue = Random.Range(0.0f,1.0f);
-        //Debug.Log("randomValue: "+randomValue);
         randomEventTile = Random.Range(0.0f,1.0f);
 
         if(randomValue <= 0.85f)
@@ -930,7 +928,6 @@ public class GameLogic : MonoBehaviour
         for ( int a = 0; a < m_activePirateShips.Count; a++)
         {
             m_activePirateShips[a].GetComponent<PirateShipBehaviour>().takeTurn = true;
-            Debug.Log("pirate takes turn");
             yield return new WaitForSeconds(turnTime);
         }
 

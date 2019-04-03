@@ -21,96 +21,90 @@ public class PirateShipBehaviour : MonoBehaviour
 
     private Vector3 m_oldPreyPosition;
 
-    void FixedUpdate()
-    {
-        if(takeTurn)
-        {
+    void FixedUpdate(){
+
+        if(takeTurn){
+
             EnemyTakeTurn();
             takeTurn = false;
         }
     }
 
-    public void EnemyTakeTurn()
-    {
-        if(!sightedPrey)
-        {
+    public void EnemyTakeTurn(){
+
+        if(!sightedPrey){
+
+            TurnInRandomDirection();
             SpottingPrey();   
         }
-        else
-        {
+        else{
+
             FollowPreyObject();
         }
     }
 
-    void SpottingPrey()
-    {
+    void SpottingPrey(){
+
         Vector2 pPos = new Vector2(preyObject.transform.position.x,preyObject.transform.position.z);
         Vector2 sPos = new Vector2();
         float viewDirection = transform.localRotation.y;
 
-        switch(viewDirection)
-        {
+        switch(viewDirection){
             // up
             case 0.0f :
-                for(int a = 0; a < m_lineOfSight; a++)
-                {
+                for(int a = 0; a < m_lineOfSight; a++){
+
                     sPos = new Vector2(transform.position.x,transform.position.z+a);
                     
-                    if(pPos == sPos)
-                    {
-                        //Debug.Log("Spotted preyObject");
+                    if(pPos == sPos){
+
                         sightedPrey = true;
-                        FindPathToPrey();
                     }
                 }
             break;
             // down
             case 1.0f :
-                for(int b = 0; b < m_lineOfSight; b++)
-                {
+                for(int b = 0; b < m_lineOfSight; b++){
+
                     sPos = new Vector2(transform.position.x,transform.position.z-b);
                     
-                    if(pPos == sPos)
-                    {
-                        //Debug.Log("Spotted preyObject");
+                    if(pPos == sPos){
+                        
                         sightedPrey = true;
-                        FindPathToPrey();
                     }
                 }
             break;
             //left
             case -0.7071068f :
-                for(int c = 0; c < m_lineOfSight; c++)
-                {
+                for(int c = 0; c < m_lineOfSight; c++){
+
                     sPos = new Vector2(transform.position.x-c,transform.position.z);
                     
-                    if(pPos == sPos)
-                    {
-                        //Debug.Log("Spotted preyObject");
+                    if(pPos == sPos){
+
                         sightedPrey = true;
-                        FindPathToPrey();
                     }
                 }
             break;
             // right
             case 0.7071068f :
-                for(int d = 0; d < m_lineOfSight; d++)
-                {
+                for(int d = 0; d < m_lineOfSight; d++){
+
                     sPos = new Vector2(transform.position.x+d,transform.position.z);
                     
-                    if(pPos == sPos)
-                    {
-                        //Debug.Log("Spotted preyObject");
+                    if(pPos == sPos){
+
                         sightedPrey = true;
-                        FindPathToPrey();
                     }
                 }
             break;
         }
+        if(sightedPrey){
+             FindPathToPrey();
+        }
     }
 
-    void FollowPreyObject()
-    {
+    void FollowPreyObject(){
         /*if(m_oldPreyPosition != preyObject.transform.position)
         {
             Debug.Log("Player has new position.");
@@ -143,83 +137,97 @@ public class PirateShipBehaviour : MonoBehaviour
 
     }
 
-    void TurnInRandomDirection()
-    {
+    void TurnInRandomDirection(){
+
         int randomShipRotation = Random.Range(0,4);
 
-        if(randomShipRotation == 0)
-        {
+        if(randomShipRotation == 0){
+
             transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
         }
-        else if(randomShipRotation == 1)
-        {
+        else if(randomShipRotation == 1){
+
             transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
         }
-        else if(randomShipRotation == 2)
-        {
+        else if(randomShipRotation == 2){
+
             transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
         }
-        else
-        {
+        else{
+
             transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
         }
     }
 
-    void ResetPirateShip()
-    {
+    void ResetPirateShip(){
+
         m_follow = 0;
     }
 
-    void FindPathToPrey()
-    {
+    void FindPathToPrey(){
+
         m_pathToPrey.Clear();
 
         m_pathToPrey.Add(preyObject.transform.position);
 
-        for (int a = 0; a < 5; a++)
-        {
+        for (int a = 0; a < 5; a++){
+
             Vector3 currentPos = m_pathToPrey[m_pathToPrey.Count-1];
             Vector3 newPos = TryNextNodeCloserToMe(currentPos);
 
-            if(newPos.x == transform.position.x && newPos.z == transform.position.z)
-            {
+            if(newPos.x == transform.position.x && newPos.z == transform.position.z){
+
                  foundPathToPrey =  true;
                 break;
             } 
 
-            else if(newPos.x != transform.position.x || newPos.z != transform.position.z)
-            {
-                Debug.Log(newPos);
+            else if(newPos.x != transform.position.x || newPos.z != transform.position.z){
+
                 m_pathToPrey.Add(newPos);
             }
-        }
-
-       
+        }       
     }
-    Vector3 TryNextNodeCloserToMe(Vector3 currentPos)
-    {
-        Debug.Log("Try to find next node from: "+ currentPos);
+    Vector3 TryNextNodeCloserToMe(Vector3 currentPos){
+
         Vector3 newPos = new Vector3();
 
         float   distanceToMyself = 200.0f;
 
-        List<Vector3> possiblePositions = new List<Vector3>()
-        {
+        List<Vector3> possiblePositions = new List<Vector3>(){
+
             new Vector3(currentPos.x, currentPos.y, currentPos.z+1),
             new Vector3(currentPos.x, currentPos.y, currentPos.z-1),
             new Vector3(currentPos.x+1, currentPos.y, currentPos.z),
             new Vector3(currentPos.x-1, currentPos.y, currentPos.z)
         };
 
-        for(int a = 0; a < possiblePositions.Count;a++)
-        {
-            float tempDistance = Vector3.Distance(possiblePositions[a], gameObject.transform.position);
+        for(int a = 0; a < possiblePositions.Count;a++){
 
-            if( tempDistance < distanceToMyself)
-            {
-                distanceToMyself = tempDistance;
-                newPos = possiblePositions[a];
-                //Debug.Log(newPos);
+            for(int b = 0; b < gameLogic.usedGameTiles.Count; b++){
+
+                if(gameLogic.usedGameTiles[b].transform.position.x == possiblePositions[a].x && 
+                gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && 
+                gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile ||
+                gameLogic.usedGameTiles[b].transform.position.x == possiblePositions[a].x && 
+                gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && 
+                gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.PirateTile){
+
+                    for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++){
+
+                        if( gameLogic.m_activePirateShips[c].transform.position.x != possiblePositions[a].x && 
+                            gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z && 
+                            gameLogic.m_activePirateShips[c] != gameObject){
+
+                            float tempDistance = Vector3.Distance(possiblePositions[a], gameObject.transform.position);
+
+                            if( tempDistance < distanceToMyself){
+
+                                distanceToMyself = tempDistance;
+                                newPos = possiblePositions[a];
+                            }
+                        }
+                    }
+                }
             }
         }
         return newPos;
@@ -248,10 +256,10 @@ public class PirateShipBehaviour : MonoBehaviour
         //         }
         //     }
         // }
-    void OnDrawGizmos()
-    {
-        for(int a = 0; a < m_pathToPrey.Count; a++)
-        {
+    void OnDrawGizmos(){
+
+        for(int a = 0; a < m_pathToPrey.Count; a++){
+            
             Vector3 pos = new Vector3(m_pathToPrey[a].x, 1.0f, m_pathToPrey[a].z);
             Gizmos.DrawSphere(pos,0.25f);
         }
