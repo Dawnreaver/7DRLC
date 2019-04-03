@@ -140,6 +140,7 @@ public class PlayerBehaviour : MonoBehaviour
                 if(transform.localRotation.y != 0.0f)
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.forward,Vector3.up);
+                    SetPlayerTurn(true);
                 }
                 else if (transform.localRotation.y == 0.0f && !pathisBlocked)
                 {
@@ -166,6 +167,7 @@ public class PlayerBehaviour : MonoBehaviour
                 if(transform.localRotation.y != 1.0f)
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.back,Vector3.up);
+                    SetPlayerTurn(true);
                 }
                 else if (transform.localRotation.y == 1.0f && !pathisBlocked)
                 {
@@ -192,6 +194,7 @@ public class PlayerBehaviour : MonoBehaviour
                 if(transform.localRotation.y != -0.7071068f)
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.left,Vector3.up);
+                    SetPlayerTurn(true);
                 }
                 else if (transform.localRotation.y == -0.7071068f && !pathisBlocked)
                 {
@@ -218,6 +221,7 @@ public class PlayerBehaviour : MonoBehaviour
                 if(transform.localRotation.y != 0.7071068f)
                 {
                     transform.rotation = Quaternion.LookRotation(Vector3.right,Vector3.up);
+                    SetPlayerTurn(true);
                 }
                 else if (transform.localRotation.y == 0.7071068f && !pathisBlocked)
                 {
