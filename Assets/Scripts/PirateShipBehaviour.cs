@@ -12,8 +12,11 @@ public class PirateShipBehaviour : MonoBehaviour
     public bool sightedPrey = false;
     private float m_distanceToPrey;
     private int m_ketchUpEstimate = 0;
+    /* /// Variables for stop chasing the player after X turns
     public int followThreshold = 15; // number of fields the pirate will follow beforr abandoning the chase
     private int m_follow = 0;
+    public bool stopChase = false;
+    */
     public bool takeTurn = false;
     public List<Vector3> m_pathToPrey = new List<Vector3>();
 
@@ -105,36 +108,10 @@ public class PirateShipBehaviour : MonoBehaviour
     }
 
     void FollowPreyObject(){
-        /*if(m_oldPreyPosition != preyObject.transform.position)
-        {
-            Debug.Log("Player has new position.");
-             foundPathToPrey = false;
-             m_oldPreyPosition = preyObject.transform.position;
-        } 
-
-        if(!foundPathToPrey)
-        {
-            FindPathToPrey();
-            transform.position = m_pathToPrey[m_pathToPrey.Count-1];
-            m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
-            Debug.Log("Follow: No path first");
-        }
-        else
-        {
-            transform.position = m_pathToPrey[m_pathToPrey.Count-1];
-            m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
-            Debug.Log("Follow: Path first");
-
-            if(m_pathToPrey.Count == 0)
-            {
-                Debug.Log("Fighting player");
-            }
-        }*/
 
         FindPathToPrey();
         transform.position = m_pathToPrey[m_pathToPrey.Count-1];
         m_pathToPrey.Remove(m_pathToPrey[m_pathToPrey.Count-1]);
-
     }
 
     void TurnInRandomDirection(){
@@ -161,7 +138,7 @@ public class PirateShipBehaviour : MonoBehaviour
 
     void ResetPirateShip(){
 
-        m_follow = 0;
+        //m_follow = 0;
     }
 
     void FindPathToPrey(){
@@ -177,11 +154,12 @@ public class PirateShipBehaviour : MonoBehaviour
 
             if(newPos.x == transform.position.x && newPos.z == transform.position.z){
 
-                 foundPathToPrey =  true;
+                foundPathToPrey =  true;
+                Debug.Log(a);
                 break;
             } 
 
-            else if(newPos.x != transform.position.x || newPos.z != transform.position.z){
+            else if(newPos.x != transform.position.x || newPos.z != transform.position.z ){
 
                 m_pathToPrey.Add(newPos);
             }
@@ -232,30 +210,6 @@ public class PirateShipBehaviour : MonoBehaviour
         }
         return newPos;
     }
-        // for(int a = 0; a < possiblePositions.Count;a++)
-        // {
-        //     for(int b = 0; b < gameLogic.usedGameTiles.Count; b++)
-        //     {
-        //         if(gameLogic.usedGameTiles[b].transform.position.x == possiblePositions[a].x && gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile)
-        //         {
-                   
-        //             float tempDistance = Vector3.Distance(possiblePositions[a], transform.position);
-
-        //             for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++)
-        //             {
-        //                 if(gameLogic.m_activePirateShips[c].transform.position.x != possiblePositions[a].x && gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z)
-        //                 {
-        //                     if( tempDistance < distanceToMyself)
-        //                     {
-        //                         //Debug.Log("Found position: "+ possiblePositions[a] + " Distance: "+ tempDistance);
-        //                         distanceToMyself = tempDistance;
-        //                         newPos = possiblePositions[a];
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
     void OnDrawGizmos(){
 
         for(int a = 0; a < m_pathToPrey.Count; a++){
