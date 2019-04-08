@@ -180,29 +180,34 @@ public class PirateShipBehaviour : MonoBehaviour
         };
 
         for(int a = 0; a < possiblePositions.Count;a++){
-
+            Debug.Log("check possible positions");
             for(int b = 0; b < gameLogic.usedGameTiles.Count; b++){
-
+                
                 if(gameLogic.usedGameTiles[b].transform.position.x == possiblePositions[a].x && 
-                gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && 
+                gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z && 
                 gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.WaterTile ||
                 gameLogic.usedGameTiles[b].transform.position.x == possiblePositions[a].x && 
                 gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && 
                 gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.PirateTile){
+                Debug.Log("is a used game tile");
 
-                    for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++){
-
+                     for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++){
+                        Debug.Log("check if blocked by another pirate");
+                        Debug.Log(gameLogic.m_activePirateShips[c].transform.position);
                         if( gameLogic.m_activePirateShips[c].transform.position.x != possiblePositions[a].x && 
-                            gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z && 
-                            gameLogic.m_activePirateShips[c] != gameObject){
-
+                             gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z){
+                            Debug.Log("Space is not blocked by a pirate");
                             float tempDistance = Vector3.Distance(possiblePositions[a], gameObject.transform.position);
-
+                            
                             if( tempDistance < distanceToMyself){
-
+                                Debug.Log("position is closer");
                                 distanceToMyself = tempDistance;
                                 newPos = possiblePositions[a];
                             }
+                        }
+                        else
+                        {
+                            Debug.Log(gameLogic.m_activePirateShips[c]+" is in the way at "+gameLogic.m_activePirateShips[c].transform.position);
                         }
                     }
                 }

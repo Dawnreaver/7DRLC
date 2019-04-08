@@ -191,7 +191,7 @@ public class GameLogic : MonoBehaviour
         for( int c = 0; c < m_piratePoolSize; c ++)
         {
             GameObject pirate = Instantiate(piratePrefab, Vector3.zero, Quaternion.identity) as GameObject;
-            pirate.name = "PirateShip";
+            pirate.name = "PirateShip"+c;
             m_piratePool.Add(pirate);
             pirate.transform.SetParent(gameObject.transform);
             pirate.GetComponent<PirateShipBehaviour>().gameLogic = this;
