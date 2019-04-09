@@ -169,7 +169,7 @@ public class PirateShipBehaviour : MonoBehaviour
 
         Vector3 newPos = new Vector3();
 
-        float   distanceToMyself = 200.0f;
+        float   distanceToMyself = Vector3.Distance(currentPos,transform.position);
 
         List<Vector3> possiblePositions = new List<Vector3>(){
 
@@ -196,7 +196,7 @@ public class PirateShipBehaviour : MonoBehaviour
                         Debug.Log(gameLogic.m_activePirateShips[c].transform.position);
                         if( gameLogic.m_activePirateShips[c].transform.position.x != possiblePositions[a].x && 
                              gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z){
-                            Debug.Log("Space is not blocked by a pirate");
+                            Debug.Log("Space is not blocked by a pirate: "+possiblePositions[a]);
                             float tempDistance = Vector3.Distance(possiblePositions[a], gameObject.transform.position);
                             
                             if( tempDistance < distanceToMyself){
