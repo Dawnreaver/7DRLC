@@ -159,7 +159,7 @@ public class PirateShipBehaviour : MonoBehaviour
                 break;
             } 
 
-            else if(newPos.x != transform.position.x || newPos.z != transform.position.z && !m_pathToPrey.Contains(newPos)){
+            else if(newPos.x != transform.position.x && newPos.z != transform.position.z && !m_pathToPrey.Contains(newPos)){
 
                 m_pathToPrey.Add(newPos);
             }
@@ -172,12 +172,10 @@ public class PirateShipBehaviour : MonoBehaviour
         float   distanceToMyself = Vector3.Distance(currentPos,transform.position);
 
         List<Vector3> possiblePositions = new List<Vector3>(){
-
             new Vector3(currentPos.x, currentPos.y, currentPos.z+1),
             new Vector3(currentPos.x, currentPos.y, currentPos.z-1),
             new Vector3(currentPos.x+1, currentPos.y, currentPos.z),
-            new Vector3(currentPos.x-1, currentPos.y, currentPos.z)
-        };
+            new Vector3(currentPos.x-1, currentPos.y, currentPos.z)};
 
         for(int a = 0; a < possiblePositions.Count;a++){
             for(int b = 0; b < gameLogic.usedGameTiles.Count; b++){
@@ -189,19 +187,29 @@ public class PirateShipBehaviour : MonoBehaviour
                 gameLogic.usedGameTiles[b].transform.position.z == possiblePositions[a].z  && 
                 gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType == GameTileTypes.PirateTile){
 
-                     for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++){
-                        Debug.Log(gameLogic.m_activePirateShips[c].transform.position+ " - "+possiblePositions[a]);
-                        if( gameLogic.m_activePirateShips[c].transform.position.x != possiblePositions[a].x && 
-                             gameLogic.m_activePirateShips[c].transform.position.z != possiblePositions[a].z){
-                            Debug.Log("Space is not blocked by a pirate: "+possiblePositions[a]);
-                            float tempDistance = Vector3.Distance(possiblePositions[a], gameObject.transform.position);
-                            Debug.Log(possiblePositions[a]+ "- distance: "+tempDistance);
-                            if( tempDistance < distanceToMyself){
-                                distanceToMyself = tempDistance;
-                                newPos = possiblePositions[a];
+                    bool noPirate = true;
+
+                    for(int c = 0; c < gameLogic.m_activePirateShips.Count; c++)
+                    {
+                        
+                        if( gameLogic.m_activePirateShips[c].transform.position.x == possiblePositions[a].x && 
+                            gameLogic.m_activePirateShips[c].transform.position.z == possiblePositions[a].z){
+
+                                noPirate = false;
+                                Debug.Log("Space is blocked by a pirate: "+possiblePositions[a]);
                             }
-                        }
+                            if(noPirate){
+                                
+                                float tempDistance = Vector3.Distance(possiblePositions[a], gameObject.transform.position);
+                                if( tempDistance < distanceToMyself){
+                                    distanceToMyself = tempDistance;
+                                    newPos = possiblePositions[a];
+                                }
+                            }
                     }
+                }
+                else{
+                    Debug.Log("Tile can't be passed by pirate its: "+gameLogic.usedGameTiles[b].GetComponent<GameTileBehaviour>().tileType);
                 }
             }
         }

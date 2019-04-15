@@ -66,7 +66,7 @@ public class SaveSaga : MonoBehaviour
     // Update is called once per frame
     public void RecordSaga()
     {
-        //if (Input.GetKeyDown(KeyCode.Space))
+        /* //if (Input.GetKeyDown(KeyCode.Space))
         //{
             if (rectT != null)
             {
@@ -93,7 +93,8 @@ public class SaveSaga : MonoBehaviour
                 Debug.Log("Rect transform is null to capture the screenshot, hence fullscreen has been taken.");
                 ScreenCapture.CaptureScreenshot("FullPageScreenShot.png");
             }
-        //}
+        //}*/
+        StartCoroutine(takeScreenShot());
     }
 
     private void createCanvasWithRectTransform()
@@ -150,10 +151,12 @@ public class SaveSaga : MonoBehaviour
         var bytes = tex.EncodeToPNG();
         Destroy(tex);
 
-        string fileName = "%userprofile%/desktop/Saga of "+gameLogic.playerObject.GetComponent<PlayerBehaviour>().playerName+" "+Time.timeSinceLevelLoad;
+       //string fileName = "%userprofile%\\desktop\\Saga_Of_"+gameLogic.playerObject.GetComponent<PlayerBehaviour>().playerName+"_"+Time.timeSinceLevelLoad+".png";
+        string fileName = Application.dataPath+"\\Saga"+Time.timeSinceLevelLoad+".png";
+
         Debug.Log(Application.dataPath + fileName+".png");
         //Writing bytes to a file
-        File.WriteAllBytes(fileName+".png", bytes);
+        File.WriteAllBytes(fileName, bytes);
 
         //In case of ScaleMode was not ScaleWithScreenSize, parent will not be assigned then no need to revert the changes
         if (rectTransformParent != null)
